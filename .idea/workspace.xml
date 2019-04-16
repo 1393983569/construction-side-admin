@@ -14,7 +14,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="357" />
     <option name="y" value="167" />
     <option name="width" value="1315" />
@@ -33,11 +33,6 @@
             <path>
               <item name="construction-side-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="construction-side-admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="construction-side-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="construction-side-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -71,15 +66,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1555294304937</updated>
-      <workItem from="1555294306091" duration="623000" />
+      <workItem from="1555294306091" duration="944000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="623000" />
+    <option name="totallyTimeSpent" value="944000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="npm" side_tool="true" />
       <window_info id="Favorites" side_tool="true" />
