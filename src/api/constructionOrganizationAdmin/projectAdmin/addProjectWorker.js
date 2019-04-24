@@ -11,12 +11,22 @@ export const getPageListAll = (pageNum) => {
 }
 
 export const add = (res) => {
+  let data = {}
   let params = new URLSearchParams()
-  for (let key in res) {
-    params.append(key, res[key])
+  if (!res.entryTime) {
+    delete res.entryAttachments
   }
+  if (!res.exitTime) {
+    delete res.exitAttachments
+  }
+  for (let key in res) {
+    if (res[key]) {
+      data[key] = res[key]
+    }
+  }
+  params.append('object', JSON.stringify(data))
   return axios.request({
-    url: 'workerbinding/add',
+    url: 'projectCorpTeam/add',
     data: params,
     method: 'post'
   })

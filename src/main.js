@@ -40,6 +40,21 @@ Vue.config.productionTip = false
  */
 Vue.prototype.$config = config
 
+/**
+ * 添加七牛基础域名信息
+ */
+Vue.prototype.addImgBase = key => {
+  return `${config.baseUrl.qiniuBaseUrl}/${key}`
+}
+
+/**
+ * 移除七牛基础域名信息
+ */
+Vue.prototype.removeImgBase = url => {
+  const index = url.lastIndexOf('/')
+  return url.substr(index + 1, url.length)
+}
+
 // 对Date的扩展，将 Date 转化为指定格式的String
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)

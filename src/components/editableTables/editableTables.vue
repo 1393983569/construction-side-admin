@@ -16,7 +16,7 @@
         <slot></slot>
       </div>
     </div>
-    <Table ref="selection" stripe :columns="processingLolumns" :data="value" @on-selection-change="selectionChange" :loading="progress"></Table>
+    <Table ref="selection" :show-header="showHeader" :tooltip-theme="dark" stripe :columns="processingLolumns" :data="value" @on-selection-change="selectionChange" :loading="progress"></Table>
     <slot name='statistics'></slot>
     <Page :total="pageTotal * 10" show-elevator @on-change='emitPage' @on-page-size-change='emitPage' style="margin-top: 20px" />
   </div>
@@ -31,7 +31,8 @@ export default ({
       inputValue: '',
       selectValueInput: '',
       modelSelect: '',
-      progress: false
+      progress: false,
+      dark: 'light'
     }
   },
   props: {
@@ -68,6 +69,10 @@ export default ({
     selectSatae: {
       type: String,
       default: ''
+    },
+    showHeader: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

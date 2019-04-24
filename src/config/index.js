@@ -25,10 +25,13 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://servicezhgd.yungoux.com/admin',
-    // dev: 'http://192.168.31.229/admin',
-    pro: 'http://servicezhgd.yungoux.com/admin',
-    // pro: 'http://192.168.31.229/admin',
-    qiniuUrl: 'http://servicezhgd.yungoux.com'
+    // dev: 'http://servicezhgd.yungoux.com/admin',
+    dev: 'http://192.168.31.229:8081/admin',
+    // pro: 'http://servicezhgd.yungoux.com/admin',
+    pro: 'http://192.168.31.229:8081/admin',
+    // 七牛旧图片上传组件回显地址
+    qiniuUrl: 'http://qiniu.dnwapp.com/',
+    // 七牛新图片上传组件回显地址
+    qiniuBaseUrl: 'http://qiniu.dnwapp.com'
   }
 }

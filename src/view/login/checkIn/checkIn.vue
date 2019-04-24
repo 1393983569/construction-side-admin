@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%;" class="bgImg">
-    <div class="mgMbl" style="width: 490px;">
+    <div class="mgMbl" style="width: 900px;">
       <span style="color: #348EED; cursor: pointer" @click="returnPage">
         <<返回首页
       </span>

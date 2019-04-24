@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import {getKey} from '@/api/qiniu'
+import {getQiniuToken} from '@/api/public'
 export default ({
   data () {
     return {
@@ -26,7 +26,7 @@ export default ({
     }
   },
   mounted: function () {
-    getKey().then(res => {
+    getQiniuToken().then(res => {
       this.uptokenKey = res.info
       this.$nextTick(() => {
         this.qiniu()

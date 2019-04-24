@@ -1,13 +1,10 @@
 import axios from '@/libs/api.request'
 
-export const add = (projectName, projectType, chargeName, chargePhone, parentId) => {
+export const add = (obj) => {
   let params = new URLSearchParams()
-  params.append('projectName', projectName)
-  params.append('projectType', projectType)
-  params.append('chargeName', chargeName)
-  params.append('chargePhone', chargePhone)
-  params.append('parentId', parentId)
-  params.append('type', 2)
+  for (let key in obj) {
+    params.append(key, obj[key])
+  }
   return axios.request({
     url: 'project/add',
     data: params,
@@ -15,13 +12,22 @@ export const add = (projectName, projectType, chargeName, chargePhone, parentId)
   })
 }
 
-export const getPageList = (parentId) => {
-  let params = new URLSearchParams()
-  params.append('pageSize', -1)
-  params.append('parentId', parentId)
-  params.append('type', 2)
+export const getPageList = (projectCode) => {
   return axios.request({
-    url: 'project/getPageList',
+    url: `projectCorp/getPageList?projectCode=${projectCode}`,
+    method: 'GET'
+  })
+}
+
+export const addUnity = (obj) => {
+  let params = new URLSearchParams()
+  for (let key in obj) {
+    if (obj[key]) {
+      params.append(key, obj[key])
+    }
+  }
+  return axios.request({
+    url: 'projectCorp/add',
     data: params,
     method: 'post'
   })

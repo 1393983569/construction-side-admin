@@ -3,8 +3,7 @@
     <Cascader @on-change='getSiteDate' :data="data" v-model="value" :load-data="loadData" style="width: 200px;display: inline-block; z-index: 9999"></Cascader>
 </template>
 <script>
-import { getProvinceList, getCityList, getAreaList } from '@/api/components/siteSelect.js'
-import clonedeep from 'clonedeep'
+import { getAreaCodeList } from '@/api/components/siteSelect'
 export default {
   data () {
     return {
@@ -18,84 +17,59 @@ export default {
     }
   },
   methods: {
-    // 初始化得到省
-    getProvince () {
-      return getProvinceList().then(res => {
-        let data = []
-        res.info.map(item => {
-          let value = {}
-          value.value = item.id
-          value.label = item.name
-          value.loading = false
-          value.children = []
-          value.state = '1'
-          data.push(value)
-        })
-        this.data = clonedeep(data)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getCity (id) {
-      return getCityList(id).then(res => {
-        let data = []
-        res.info.map(item => {
-          let value = {}
-          value.value = item.id
-          value.label = item.name
-          value.loading = false
-          value.children = []
-          value.state = '2'
-          data.push(value)
-        })
-        return clonedeep(data)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getArea (id) {
-      return getAreaList(id).then(res => {
-        let data = []
-        res.info.map(item => {
-          let value = {}
-          value.value = item.id
-          value.label = item.name
-          value.state = '3'
-          data.push(value)
-        })
-        return clonedeep(data)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
     loadData (item, callback) {
-      // 省
-      if (item.state === '1') {
-        this.getCity(item.value).then(res => {
-          item.loading = true
-          item.children = res
+      item.loading = true
+      getAreaCodeList(item.value).then(res => {
+        // 获取字段位置
+        let lengthValue = res.info[0].id.length - 2
+        let compare = res.info[0].id.substring(lengthValue, res.info[0].id.length)
+        if (compare + '' !== '00') {
+          res.info.forEach(itemData => {
+            item.children.push({
+              value: itemData.id,
+              label: itemData.name
+            })
+          })
           item.loading = false
           callback()
-        }).catch(err => {
-          console.log(err)
-        })
-      } else if (item.state === '2') {
-        this.getArea(item.value).then(res => {
-          item.loading = true
-          item.children = res
+        } else {
+          res.info.forEach(itemData => {
+            item.children.push({
+              value: itemData.id,
+              label: itemData.name,
+              children: [],
+              loading: false
+            })
+          })
           item.loading = false
           callback()
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     getSiteDate (e) {
       this.$emit('input', e)
+    },
+    getAreaCode () {
+      this.data = []
+      getAreaCodeList().then(res => {
+        this.data = []
+        res.info.forEach(item => {
+          this.data.push({
+            value: item.id,
+            label: item.name,
+            children: [],
+            loading: false
+          })
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   mounted () {
-    this.getProvince()
+    this.getAreaCode()
   },
   watch: {
 

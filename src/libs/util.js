@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie'
+// 引入解密 加密 组件
+const CryptoJS = require("crypto-js");
 // cookie保存的天数
 import config from '@/config'
 import { forEach, hasOneOf, objEqual } from '@/libs/tools'
@@ -25,6 +27,20 @@ const showThisMenuEle = (item, access) => {
     if (hasOneOf(item.meta.access, access)) return true
     else return false
   } else return true
+}
+/**
+ * AES 解密
+ */
+export const aesDecrypt = (ciphertext) => {
+  if (!ciphertext) return ''
+  let key = CryptoJS.enc.Utf8.parse('f7db3b3cfe11cbed9d6cf00841c4a075')
+  let iv = CryptoJS.enc.Utf8.parse('f7db3b3cfe11cbed9d6cf00841c4a075')
+  let bytes =CryptoJS.AES.decrypt(ciphertext,key,{
+    iv:iv,
+    mode:CryptoJS.mode.CBC,
+    padding:CryptoJS.pad.Pkcs7
+  })
+  return bytes.toString(CryptoJS.enc.Utf8)
 }
 
 /**
@@ -56,6 +72,7 @@ export const printClassPage = (name) => {
   wind.print()
   return false
 }
+
 /**
  * @param {Array} list 通过路由列表得到菜单列表
  * @returns {Array}

@@ -1,23 +1,18 @@
 import axios from '@/libs/api.request'
 
 export const add = (addObj) => {
-  const { deptName, deptPhone, deptNum, deptAddr, cityId, dLoginName, allowPic, bankId, buildId } = addObj
   console.log(addObj)
   let params = new URLSearchParams()
-  params.append('deptName', deptName)
-  params.append('deptPhone', deptPhone)
-  params.append('allowPic', allowPic)
-  params.append('deptNum', deptNum)
-  params.append('deptAddr', deptAddr)
-  params.append('cityId', cityId[2])
-  params.append('dLoginName', dLoginName)
-  params.append('bankId', bankId)
-  params.append('buildId', buildId)
+  if (addObj.areaCode) {
+    addObj.areaCode = addObj.areaCode[addObj.areaCode.length -1]
+  }
+  for (let key in addObj) {
+    if (addObj[key]) {
+      params.append(key, addObj[key])
+    }
+  }
   return axios.request({
-    url: 'dept/add',
-    // headers: {
-    //   'Content-Type': 'application/json;charset=UTF-8'
-    // },
+    url: 'corp/add',
     data: params,
     method: 'post'
   })
@@ -30,5 +25,12 @@ export const getAdminsList = (accountType) => {
     url: 'getAdmins',
     data: params,
     method: 'post'
+  })
+}
+
+export const getAreaCodeList = () => {
+  return axios.request({
+    url: 'areaCode/getPageList',
+    method: 'get'
   })
 }

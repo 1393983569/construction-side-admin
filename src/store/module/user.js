@@ -68,6 +68,8 @@ export default {
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
+          let storage = window.localStorage
+          storage.clear()
           commit('setToken', '')
           commit('setAccess', [])
           resolve()

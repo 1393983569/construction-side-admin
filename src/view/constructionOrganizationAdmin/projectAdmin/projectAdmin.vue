@@ -1,33 +1,12 @@
 <template>
   <div>
     <div>
-      <projectAdminSelect @sendDataList="sendDataList"></projectAdminSelect>
-      <editableTables :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
-        <Button type="primary" @click="addProject">添加项目</Button>
+      <editableTables :showHeader="true" :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
       </editableTables>
-      <Modal
-        v-model="addModal"
-        :mask-closable='false'
-        title="添加项目"
-        width="600">
-        <projectAdd ref="projectAdd" @formState="formSuccess"></projectAdd>
-        <div slot="footer">
-          <Button type="primary" :loading="loading" @click="addOk">提交</Button>
-        </div>
-      </Modal>
-      <Modal
-        v-model="addModalWorker"
-        :mask-closable='false'
-        title="添加项目工人"
-        width="600">
-        <addProjectWorker ref="addWorker" @formState="formSuccessWorker" :did="did" :pid="pid"></addProjectWorker>
-        <div slot="footer">
-          <Button type="primary" :loading="loading" @click="addWorkerOk">提交</Button>
-        </div>
-      </Modal>
       <Modal
         v-model="showWorker"
         :mask-closable='false'
+        @on-cancel="emptyFormCancel"
         title="查看工人"
         width="900">
         <showWorkerList ref="refShowWorker" @formState="formSuccessWorker" :pid="pidShowWorkerList"></showWorkerList>
@@ -44,6 +23,7 @@ import addProjectWorker from './addProjectWorker'
 import showWorkerList from './showWorker'
 import contractorAdmin from './contractorAdmin'
 import projectAdminSelect from '../../advancedFilter-components/projectAdminSelect'
+import projectAdminList from './components/projectAdminList'
 export default({
   components: {
     editableTables,
@@ -51,44 +31,60 @@ export default({
     addProjectWorker,
     showWorkerList,
     projectAdminSelect,
-    contractorAdmin
+    contractorAdmin,
+    projectAdminList
   },
   data () {
     return {
       columns: [
         {
+          type: 'expand',
+          width: 50,
+          render: (h, params) => {
+            return h(projectAdminList, {
+              props: {
+                row: params.row
+              }
+            })
+          }
+        },
+        {
           title: '项目名',
-          key: 'projectName'
-        },
-        // {
-        //   title: '项目编号',
-        //   key: 'projectNum'
-        // },
-        {
-          title: '项目地址',
-          key: 'projectAddr'
+          key: 'name'
         },
         {
-          title: '建筑规模',
-          key: 'buildSize'
+          title: '项目编码',
+          key: 'projectCode'
         },
         {
-          title: '投资规模',
-          key: 'investSize'
+          title: '项目分类',
+          key: 'category'
         },
         {
-          title: '项目类型',
-          key: 'projectType'
+          title: '项目简介',
+          key: 'description'
         },
         {
-          title: '投资主体',
-          key: 'investMain'
+          title: '总承包单位统一社会信用代码',
+          key: 'contractorCorpCode'
+        },
+        {
+          title: '总承包单位名称',
+          key: 'contractorCorpName'
+        },
+        {
+          title: '建设单位名称',
+          key: 'buildCorpCode'
+        },
+        {
+          title: '建设单位统一社会信用代码',
+          key: 'buildCorpCode'
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 260,
+          width: 150,
           render: (h, params) => {
             let stateDisabled = true
             if (params.row.pstate + '' === '1' && params.row.bondState + '' === '1' && params.row.grantState + '' === '1') {
@@ -96,48 +92,28 @@ export default({
             }
             console.log(stateDisabled)
             return h('div', [
+              h(contractorAdmin, {
+                props: {
+                  projectCode: params.row.projectCode
+                }
+              }),
               h('Button', {
                 props: {
                   type: 'primary',
-                  size: 'small',
-                  disabled: stateDisabled
+                  size: 'small'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginRight: '5px',
+                  margin: '8px 0'
                 },
                 on: {
                   click: () => {
                     this.$refs.addWorker.emptyForm()
                     this.pid = params.row.pid
-                    this.did = params.row.did
                     this.addModalWorker = true
                   }
                 }
-              }, '添加工人'),
-              h(contractorAdmin, {
-                props: {
-                  parentId: params.row.pid + '',
-                  did: params.row.did + '',
-                  pid: params.row.pid + '',
-                  disabled: stateDisabled
-                }
-              }),
-              h('Button', {
-                props: {
-                  type: 'info',
-                  size: 'small',
-                  disabled: stateDisabled
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.pidShowWorkerList = params.row.pid + ':' + new Date()
-                    this.showWorker = true
-                  }
-                }
-              }, '查看工人')
+              }, '查看项目参建单位')
             ])
           }
         }
@@ -154,7 +130,6 @@ export default({
       loading: false,
       addModalWorker: false,
       pid: '',
-      did: '',
       pidShowWorkerList: '',
       showWorker: false
     }
@@ -185,21 +160,7 @@ export default({
     },
     // 复位
     restoration () {
-      this.accountTitle = ''
-      this.accountJob = ''
       this.pageNum = 1
-    },
-    // 添加项目模块
-    addProject () {
-      this.$refs.projectAdd.emptyForm()
-      this.addModal = true
-    },
-    addOk () {
-      this.loading = true
-      this.$refs.projectAdd.handleSubmit('formInline')
-      setTimeout(() => {
-        this.loading = this.$refs.projectAdd.loading
-      }, 500)
     },
     formSuccess (e) {
       if (e) {
@@ -211,32 +172,8 @@ export default({
         this.loading = false
       }
     },
-    // 添加工人 响应结果
-    formSuccessWorker (e) {
-      if (e) {
-        this.loading = false
-        this.addModalWorker = false
-        // 清空表单数据
-        this.$refs.addWorker.emptyForm()
-      } else {
-        this.loading = false
-      }
-    },
-    addWorkerOk () {
-      this.loading = true
-      this.$refs.addWorker.handleSubmit('formInline')
-      setTimeout(() => {
-        this.loading = this.$refs.addWorker.loading
-      }, 500)
-    },
-    sendDataList (e) {
-      e.forEach(item => {
-        for (let key in item) {
-          this.selectValue[key] = item[key]
-        }
-      })
-      // console.log(this.selectValue)
-      this.getList()
+    emptyFormCancel () {
+
     }
   },
   mounted () {

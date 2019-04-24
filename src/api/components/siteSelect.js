@@ -1,37 +1,19 @@
 import axios from '@/libs/api.request'
 
-// 得到一级
-export const getProvinceList = () => {
-  return axios.request({
-    url: 'getProvinceList',
-    method: 'post'
-  })
-}
-
 /**
- * 得到市
- * @param {String} 省id
+ * 查询地区编码列表
+ * @param parentId
+ * @returns {*|never|AxiosPromise<any>|l.default}
  */
-export const getCityList = (value) => {
-  let params = new URLSearchParams()
-  params.append('provinceId', value)
+export const getAreaCodeList = (parentId) => {
+  let url = 'getProvinceList'
+  if (parentId) {
+    url = `areaCode/getPageList?parentId=${parentId}`
+  } else {
+    url = 'areaCode/getPageList'
+  }
   return axios.request({
-    url: 'getCityList',
-    data: params,
-    method: 'post'
-  })
-}
-
-/**
- * 得到区
- * @param {String} 市id
- */
-export const getAreaList = (cityId) => {
-  let params = new URLSearchParams()
-  params.append('cityId', cityId)
-  return axios.request({
-    url: 'getAreaList',
-    data: params,
-    method: 'post'
+    url: url,
+    method: 'get'
   })
 }

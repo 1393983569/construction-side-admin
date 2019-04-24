@@ -1,15 +1,17 @@
 <template>
   <div>
+    <Button type="primary" @click="addWorkerValue">添加工人</Button>
     <div>
       <editableTables :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'></editableTables>
     </div>
     <Modal
       v-model="modalMessage"
+      :mask-closable="false"
       title="修改信息"
       width="600">
       <modificationMessage ref="modification" :modificationData="modificationData"></modificationMessage>
       <div slot="footer">
-        <Button type="primary" :loading="loading" @click="modificationEdit">提交</Button>
+        <Button type="primary" :loading="loading" @click="addSubmit">提交</Button>
       </div>
     </Modal>
   </div>
@@ -108,7 +110,8 @@ export default({
       // 需求参数
       modalMessage: false,
       modificationData: '',
-      loading: false
+      loading: false,
+      callData: ''
     }
   },
   props: {
@@ -157,6 +160,16 @@ export default({
         this.modalMessage = false
         this.getList()
       }, 500)
+    },
+    getCallData (e) {
+      this.callData = e
+    },
+    addWorkerValue (e) {
+
+    },
+    addSubmit () {
+      this.loading = true
+      this.$refs.projectAdd.handleSubmit()
     }
   },
   watch: {

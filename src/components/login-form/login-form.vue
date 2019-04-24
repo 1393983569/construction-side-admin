@@ -1,14 +1,14 @@
 <template>
   <Form ref="loginForm" :model="form" :rules="rules">
     <FormItem prop="userName">
-      <!--<Input v-model="form.userName" placeholder="请输入用户名">-->
-        <!--<span slot="prepend">-->
-          <!--<Icon :size="16" type="person"></Icon>-->
-        <!--</span>-->
-      <!--</Input>-->
-      <Select v-model="form.userName">
-        <Option v-for="(item, index) in modelSelect" :key="index" :value="item">{{item}}</Option>
-      </Select>
+      <Input v-model="form.userName" placeholder="请输入用户名">
+        <span slot="prepend">
+          <Icon :size="16" type="person"></Icon>
+        </span>
+      </Input>
+      <!--<Select v-model="form.userName">-->
+        <!--<Option v-for="(item, index) in modelSelect" :key="index" :value="item">{{item}}</Option>-->
+      <!--</Select>-->
     </FormItem>
     <FormItem prop="password">
       <Input type="password" v-model="form.password" placeholder="请输入密码">

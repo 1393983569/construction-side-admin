@@ -45,34 +45,36 @@ export default {
       this.loading = true
       this.$refs[name].validate((valid) => {
         if (valid) {
-          getAccountDetail(this.formInline.mobilePhone).then(res => {
-            switch (res.info) {
-              case '该用户不存在,请去申请':
-                // 用户不存在
-                this.$emit('getStatePhone', '不存在:' + this.formInline.mobilePhone)
-                this.loading = false
-                break
-              case '通过':
-                // 请求正确的事
-                this.$emit('getStatePhone', '通过:' + this.formInline.mobilePhone)
-                this.loading = false
-                break
-              case '未通过':
-                // 请求正确的事
-                this.$emit('getStatePhone', '未通过:' + this.formInline.mobilePhone)
-                this.loading = false
-                break
-              case '审核中':
-                // 请求正确的事
-                this.$emit('getStatePhone', '审核中:' + this.formInline.mobilePhone)
-                this.loading = false
-                break
-              default:
-            }
-          }).catch(err => {
-            this.loading = false
-            this.$Message.error(err)
-          })
+          this.$emit('getStatePhone', '不存在:' + this.formInline.mobilePhone)
+          this.loading = false
+          // getAccountDetail(this.formInline.mobilePhone).then(res => {
+          //   switch (res.info) {
+          //     case '该用户不存在,请去申请':
+          //       // 用户不存在
+          //       this.$emit('getStatePhone', '不存在:' + this.formInline.mobilePhone)
+          //       this.loading = false
+          //       break
+          //     case '通过':
+          //       // 请求正确的事
+          //       this.$emit('getStatePhone', '通过:' + this.formInline.mobilePhone)
+          //       this.loading = false
+          //       break
+          //     case '未通过':
+          //       // 请求正确的事
+          //       this.$emit('getStatePhone', '未通过:' + this.formInline.mobilePhone)
+          //       this.loading = false
+          //       break
+          //     case '审核中':
+          //       // 请求正确的事
+          //       this.$emit('getStatePhone', '审核中:' + this.formInline.mobilePhone)
+          //       this.loading = false
+          //       break
+          //     default:
+          //   }
+          // }).catch(err => {
+          //   this.loading = false
+          //   this.$Message.error(err)
+          // })
         } else {
           this.loading = false
           this.$Message.error('错误')

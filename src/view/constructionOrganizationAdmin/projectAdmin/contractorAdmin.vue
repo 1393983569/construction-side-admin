@@ -1,54 +1,77 @@
 <template>
   <div style="display: inline-block; margin-right: 5px">
-    <Button type="primary" :disabled="disabled" size="small" @click="showModal">分包管理</Button>
+    <Button type="primary" size="small" style="margin-top: 8px" @click="showModal">项目参建单位管理</Button>
     <Modal
-      v-model="contractorState"
-      width="700"
-      title="分包管理">
-      <Button type="primary" style="margin-bottom: 5px" @click="add">添加分包商</Button>
-      <Table :columns="columns" :data="data"></Table>
-    </Modal>
-    <Modal
-      v-model="showWorker"
+      v-model="showTeamOrGroup"
       :mask-closable='false'
-      title="查看工人"
+      title="查看班组"
       width="900">
-      <showWorkerList ref="refShowWorker" @formState="formSuccessWorker" :pid="pidShowWorkerList"></showWorkerList>
+      <teamOrGroup ref="refShowTeamOrGroup" @formState="formSuccessWorker"></teamOrGroup>
     </Modal>
-    <Modal
+    <Drawer
       v-model="contractorState"
-      width="700"
-      title="工人列表">
-      <Button type="primary" style="margin-bottom: 5px" @click="add">添加分包商</Button>
+      width="900"
+      title="参建单位列表">
+      <Button type="primary" style="margin-bottom: 5px" @click="add">添加参建单位</Button>
       <Table :columns="columns" :data="data"></Table>
-    </Modal>
+    </Drawer>
     <Modal
       v-model="addModalWorker"
       :mask-closable='false'
-      title="添加项目工人"
-      width="600">
-      <addProjectWorker ref="addWorker" @formState="formSuccessWorker" :did="didList" :pid="pidList"></addProjectWorker>
+      title="添加班组"
+      width="900">
+      <addProjectWorker ref="addWorker" @formState="formSuccessWorker" :projectCode="listCodeId"></addProjectWorker>
       <div slot="footer">
         <Button type="primary" :loading="loading" @click="addWorkerOk">提交</Button>
       </div>
     </Modal>
     <Modal
       v-model="addState"
-      title="分包商添加"
+      title="参建单位列表"
       :mask-closable='false'
+      width="900"
     >
       <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
-        <FormItem prop="projectName" label="分包名称">
-          <Input v-model="formInline.projectName" style="margin-bottom: 5px" placeholder="请输入分包名称" />
+        <FormItem prop="corpCode" label="社会信用代码或组织机构代码" style="width: 200px">
+          <Input v-model="formInline.corpCode" style="margin-bottom: 5px" placeholder="社会信用代码或组织机构代码" />
         </FormItem>
-        <FormItem prop="projectType" label="分包类型">
-          <Input v-model="formInline.projectType" style="margin-bottom: 5px" placeholder="请输入分包类型" />
+        <FormItem prop="corpName" label="企业名称" style="width: 200px">
+          <Input v-model="formInline.corpName" style="margin-bottom: 5px" placeholder="企业名称" />
         </FormItem>
-        <FormItem prop="chargeName" label="负责人姓名">
-          <Input v-model="formInline.chargeName" style="margin-bottom: 5px" placeholder="请输入负责人姓名" />
+        <FormItem prop="corpType" label="参建类型">
+          <Select v-model="formInline.corpType" style="width:200px">
+            <Option v-for="item in subcontractorTypeList" :value="item.id + ''" :key="item.id">{{ item.name }}</Option>
+          </Select>
         </FormItem>
-        <FormItem prop="chargePhone" label="负责人电话">
-          <Input v-model="formInline.chargePhone" placeholder="请输入负责人电话" />
+        <FormItem prop="entryTime" label="进场时间" style="width: 200px">
+          <DatePicker v-model="formInline.entryTime" type="date" placeholder="进场时间"></DatePicker>
+        </FormItem>
+        <FormItem prop="exitTime" label="退场时间" style="width: 200px">
+          <DatePicker v-model="formInline.exitTime" type="date" placeholder="退场时间"></DatePicker>
+        </FormItem>
+        <!--<FormItem prop="bankInfos" label="发放工资的银行" style="width: 200px">-->
+          <!--<Input v-model="formInline.bankInfos" style="margin-bottom: 5px" placeholder="发放工资的银行" />-->
+        <!--</FormItem>-->
+        <FormItem prop="pmName" label="项目经理名称" style="width: 200px">
+          <Input v-model="formInline.pmName" style="margin-bottom: 5px" placeholder="项目经理名称" />
+        </FormItem>
+        <!--<FormItem prop="pmIDCardType" label="项目经理证件类型">-->
+          <!--<Input v-model="formInline.pmIDCardType" style="margin-bottom: 5px" placeholder="项目经理证件类型" />-->
+        <!--</FormItem>-->
+        <FormItem prop="pmIDCardNumber" label="项目经理证件号码" style="width: 200px">
+          <Input v-model="formInline.pmIDCardNumber" style="margin-bottom: 5px" placeholder="项目经理证件号码" />
+        </FormItem>
+        <FormItem prop="pmPhone" label="项目经理电话" style="width: 200px">
+          <Input v-model="formInline.pmPhone" style="margin-bottom: 5px" placeholder="项目经理电话" />
+        </FormItem>
+        <FormItem prop="bankName" label="银行支行名称" style="width: 200px">
+          <Input v-model="formInline.bankName" style="margin-bottom: 5px" placeholder="银行支行名称" />
+        </FormItem>
+        <FormItem prop="bankNumber" label="银行卡号" style="width: 200px">
+          <Input v-model="formInline.bankNumber" style="margin-bottom: 5px" placeholder="银行卡号" />
+        </FormItem>
+        <FormItem prop="bankLinkNumber" label="银行联号" style="width: 200px">
+          <Input v-model="formInline.bankLinkNumber" style="margin-bottom: 5px" placeholder="银行联号" />
         </FormItem>
       </Form>
       <div slot="footer">
@@ -60,45 +83,69 @@
 </template>
 
 <script>
-import {add, getPageList} from '@/api/constructionOrganizationAdmin/contractorAdmin/contractorAdmin'
+import {getPageList, addUnity} from '@/api/constructionOrganizationAdmin/contractorAdmin/contractorAdmin'
 import addProjectWorker from './addProjectWorker'
-import showWorkerList from './showWorker'
+import contractorAdminList from './components/contractorAdminList'
+import {aesDecrypt} from '@/libs/util'
+import { subcontractorType, unityType } from '@/api/public'
+import teamOrGroup from './components/teamOrGroup'
 export default {
   name: 'contractorAdmin',
   components: {
     addProjectWorker,
-    showWorkerList
+    teamOrGroup
   },
   props: {
-    parentId: String,
-    did: String,
-    pid: String,
+    projectCode: {
+      default: ''
+    },
     disabled: Boolean
   },
   data () {
     return {
       columns: [
         {
-          title: '分包名称',
-          key: 'projectName'
+          type: 'expand',
+          width: 50,
+          render: (h, params) => {
+            return h(contractorAdminList, {
+              props: {
+                row: params.row
+              }
+            })
+          }
         },
         {
-          title: '分包类型',
-          key: 'projectType'
+          title: '统一社会信用代码',
+          key: 'corpCode'
         },
         {
-          title: '负责人姓名',
-          key: 'chargeName'
+          title: '企业名称',
+          key: 'corpName'
         },
         {
-          title: '负责人电话',
-          key: 'chargePhone'
+          title: '参建类型',
+          key: 'corpType'
+        },
+        {
+          title: '进场时间',
+          key: 'entryTime',
+          render: (h, params) => {
+            return h('div', params.row.entryTime.split('.')[0])
+          }
+        },
+        {
+          title: '退场时间',
+          key: 'exitTime',
+          render: (h, params) => {
+            return h('div', params.row.exitTime.split('.')[0])
+          }
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 260,
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -111,13 +158,12 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.didList = params.row.did + ''
-                    this.pidList = params.row.pid + ''
                     this.addModalWorker = true
+                    this.listCodeId = params.row.bankDomain.projectCorpId
                     this.$refs.addWorker.emptyForm()
                   }
                 }
-              }, '添加工人'),
+              }, '添加班组'),
               h('Button', {
                 props: {
                   type: 'info',
@@ -128,12 +174,11 @@ export default {
                 },
                 on: {
                   click: () => {
-                    console.log(params.row.pid)
-                    this.pidShowWorkerList = params.row.pid + ':' + new Date()
-                    this.showWorker = true
+                    this.$refs.refShowTeamOrGroup.getList(params.row.bankDomain.projectCorpId)
+                    this.showTeamOrGroup = true
                   }
                 }
-              }, '查看工人')
+              }, '查看班组')
             ])
           }
         }
@@ -144,28 +189,39 @@ export default {
       add_loading: false,
       loading: false,
       addModalWorker: false,
-      showWorker: false,
-      pidShowWorkerList: '',
+      showTeamOrGroup: false,
+      projectCorpId: '',
       pidList: '',
       didList: '',
+      subcontractorTypeList: [],
+      listCodeId: '',
       formInline: {
-        projectName: '',
-        projectType: '',
-        chargeName: '',
-        chargePhone: ''
+        corpCode: '',
+        corpName: '',
+        corpType: '',
+        entryTime: '',
+        exitTime: '',
+        // bankInfos: '',
+        pmName: '',
+        pmIDCardNumber: '',
+        pmPhone: '',
+        bankName: '',
+        bankNumber: '',
+        bankLinkNumber: '',
+        listCodeId: ''
       },
       ruleInline: {
-        projectName: [
-          { required: true, message: '分包名称不能为空', trigger: 'blur' }
+        corpCode: [
+          { required: true, message: '社会信用代码或组织机构代码', trigger: 'blur' }
         ],
-        projectType: [
-          { required: true, message: '分包类型不能为空', trigger: 'blur' }
+        corpName: [
+          { required: true, message: '企业名称不能为空', trigger: 'blur' }
         ],
-        chargeName: [
-          { required: true, message: '负责人姓名不能为空', trigger: 'blur' }
+        corpType: [
+          { required: true, message: '参建类型不能为空', trigger: 'change' }
         ],
-        chargePhone: [
-          { required: true, message: '负责人电话不能为空', trigger: 'blur' }
+        bankNumber: [
+          { required: true, message: '银行卡号不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -173,14 +229,14 @@ export default {
   methods: {
     getList () {
       this.data = []
-      getPageList(this.parentId).then(res => {
+      getPageList(this.projectCode).then(res => {
         this.data = []
         if (res.info === '暂无数据') {
           this.$Message.error(res.info)
           this.pageTotal = 1
           return
         }
-        this.data.push(...res.info)
+        this.data.push(...res.info.data)
       }).catch(err => {
         console.log(err)
       })
@@ -193,16 +249,21 @@ export default {
       this.contractorState = false
     },
     add () {
+      this.getSubcontractorType()
       this.addState = true
     },
     cancelAdd () {
+      this.$refs['formInline'].resetFields()
       this.addState = false
     },
     confirmAdd () {
       this.add_loading = true
       this.$refs['formInline'].validate((valid) => {
         if (valid) {
-          add(this.formInline.projectName, this.formInline.projectType, this.formInline.chargeName, this.formInline.chargePhone, this.parentId).then(res => {
+          this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd")
+          this.formInline.exitTime = new Date(this.formInline.exitTime).Format("yyyy-MM-dd")
+          this.formInline.projectCode = this.projectCode
+          addUnity(this.formInline).then(res => {
             this.add_loading = false
             this.$refs['formInline'].resetFields()
             this.$Message.success('成功')
@@ -212,6 +273,8 @@ export default {
             this.$Message.error(err)
             this.add_loading = false
           })
+        } else {
+          this.add_loading = false
         }
       })
     },
@@ -232,6 +295,15 @@ export default {
       setTimeout(() => {
         this.loading = this.$refs.addWorker.loading
       }, 500)
+    },
+    getSubcontractorType () {
+      this.subcontractorTypeList = []
+      unityType().then(res => {
+        this.subcontractorTypeList = []
+        this.subcontractorTypeList.push(...res.info)
+      }).catch(err => {
+
+      })
     }
   }
 }

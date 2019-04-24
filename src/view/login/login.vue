@@ -22,6 +22,7 @@
 <script>
 import loginForm from '_c/login-form'
 import { mapActions } from 'vuex'
+import Cookies from 'js-cookie'
 export default {
   data () {
     return {
