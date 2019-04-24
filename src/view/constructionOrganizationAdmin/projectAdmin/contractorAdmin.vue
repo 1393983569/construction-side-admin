@@ -160,7 +160,7 @@ export default {
                   click: () => {
                     this.addModalWorker = true
                     this.listCodeId = params.row.bankDomain.projectCorpId
-                    this.$refs.addWorker.emptyForm()
+                    this.$refs.addWorker.handleReset()  // 清空表单
                   }
                 }
               }, '添加班组'),

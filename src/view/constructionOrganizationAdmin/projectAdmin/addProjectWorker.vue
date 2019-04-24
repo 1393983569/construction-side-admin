@@ -119,7 +119,7 @@ export default {
       default: ''
     },
     projectCode: {
-      default: ''
+      type: Number
     }
   },
   methods: {
@@ -183,8 +183,8 @@ export default {
       })
     },
     // 清空
-    emptyForm () {
-
+    handleReset () {
+        this.$refs.formValidate.resetFields()
     },
     updateImgcontract (img) {
       this.formInline.contract.push(img)

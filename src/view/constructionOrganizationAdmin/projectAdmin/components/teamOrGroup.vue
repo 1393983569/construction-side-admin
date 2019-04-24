@@ -8,7 +8,7 @@
       title="添加工人"
       :mask-closable="false"
       width="900">
-      <addWorker ref="addWorkerRef" :projectCorpId="teamOrGroupId"></addWorker>
+      <addWorker ref="addWorkerRef" @submitState="submitState" :projectCorpId="teamOrGroupId"></addWorker>
       <div slot="footer">
         <Button type="primary" :loading="loading" @click="addWorkerOk">提交</Button>
       </div>
@@ -83,6 +83,7 @@
                       this.modalMessage = true
                       this.teamOrGroupId = params.row.teamSysNo
                       this.$refs.addWorkerRef.getDictionaries()
+                      this.$refs.addWorkerRef.handleReset()
                     }
                   }
                 }, '添加工人')
@@ -136,7 +137,19 @@
       },
       addWorkerOk () {
         this.loading = true
-        this.$refs.addWorker.handleSubmit('formInline')
+        this.$refs.addWorkerRef.handleSubmit('formInline')
+      },
+      submitState (e) {
+        console.log(e)
+        // 提交成功
+        if (e) {
+          this.loading = false
+          this.modalMessage = false
+        // 失败
+        } else {
+          this.loading = false
+           this.modalMessage = true
+        }
       }
     }
   })

@@ -1,9 +1,13 @@
 import axios from '@/libs/api.request'
 
-export const add = (res) => {
+/**
+ * 添加保存工人
+ * @param {*} obj
+ */
+export const add = (obj) => {
   let params = new URLSearchParams()
-  for (let key in res) {
-    if (res[key]) params.append(key, res[key])
+  for (let key in obj) {
+    if (obj[key]) params.append(key, obj[key])
   }
   return axios.request({
     url: 'worker/add',

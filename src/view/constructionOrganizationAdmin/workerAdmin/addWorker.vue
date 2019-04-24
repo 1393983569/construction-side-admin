@@ -12,16 +12,6 @@
       </FormItem>
     </Form>
     <div v-if="showData">
-      <Row>
-        <Col span="8">col-8</Col>
-        <Col span="8">col-8</Col>
-        <Col span="8">col-8</Col>
-      </Row>
-      <Row>
-        <Col span="8">col-8</Col>
-        <Col span="8">col-8</Col>
-        <Col span="8">col-8</Col>
-      </Row>
     </div>
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline v-show="stateAdd">
       <FormItem prop="idCardNum" label="身份证号">

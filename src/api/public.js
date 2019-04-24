@@ -79,3 +79,25 @@ export const importFile = (base64) => {
     method: 'post'
   })
 }
+
+/**
+ * 查询工人类型列表
+ * @returns {*|never|AxiosPromise<any>|l.default}
+ */
+export const workRole = () => {
+  return axios.request({
+    url: 'workRole/getPageList',
+    method: 'get'
+  })
+}
+
+/**
+ * 查询政治面貌列表
+ * @returns {*|never|AxiosPromise<any>|l.default}
+ */
+export const politicsType = () => {
+  return axios.request({
+    url: 'politicsType/getPageList',
+    method: 'get'
+  })
+}

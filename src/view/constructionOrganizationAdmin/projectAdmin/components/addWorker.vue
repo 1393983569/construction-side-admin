@@ -30,24 +30,26 @@
         </Input>
       </FormItem>
       <FormItem prop="startDate" label="证件有效期开始日期">
-        <Input type="text" v-model="formInline.startDate"  style="width: 250px" placeholder="证件有效期开始日期">
+        <!-- <Input type="text" v-model="formInline.startDate"  style="width: 250px" placeholder="证件有效期开始日期">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        </Input> -->
+        <DatePicker type="date" placeholder="证件有效期开始日期" v-model="formInline.startDate" style="width: 250px"></DatePicker>
       </FormItem>
       <FormItem prop="startDate" label="证件有效期结束日期">
-        <Input type="text" v-model="formInline.expiryDate"  style="width: 250px" placeholder="证件有效期结束日期">
+        <DatePicker type="date" placeholder="证件有效期结束日期" v-model="formInline.expiryDate" style="width: 250px"></DatePicker>
+        <!-- <Input type="text" v-model="formInline.expiryDate"  style="width: 250px" placeholder="证件有效期结束日期">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        </Input> -->
       </FormItem>
       <FormItem prop="workType" label="当前工种">
-        <Input type="text" v-model="formInline.workType" style="width: 250px" placeholder="当前工种">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        <Select v-model="formInline.workType" style="width:250px" placeholder="当前工种">
+          <Option v-for="item in workerTypeList.info" :value="item.tid + ''" :key="item.tid">{{ item.profession }}</Option>
+        </Select>
       </FormItem>
       <FormItem prop="workRole" label="工人类型">
-        <Input type="text" v-model="formInline.workRole" style="width: 250px" placeholder="工人类型">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        <Select v-model="formInline.workRole" style="width:250px" placeholder="工人类型">
+          <Option v-for="(item, index) in workRoleList.info" :value="item.id + ''" :key="index">{{ item.name }}</Option>
+        </Select>
       </FormItem>
       <FormItem prop="issueCardDate" label="发卡时间">
         <Input type="text" v-model="formInline.issueCardDate" style="width: 250px" placeholder="投资规模">
@@ -85,9 +87,9 @@
         </Input>
       </FormItem>
       <FormItem prop="politicsType" label="政治面貌">
-        <Input type="text" v-model="formInline.politicsType"  style="width: 250px" placeholder="政治面貌">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+         <Select v-model="formInline.politicsType" style="width:250px" placeholder="政治面貌">
+          <Option v-for="item in politicsTypeList.info" :value="item.id" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </FormItem>
       <FormItem prop="joinedTime" label="加入工会时间">
         <Input type="text" v-model="formInline.joinedTime"  style="width: 250px" placeholder="加入工会时间">
@@ -100,17 +102,15 @@
         </Input>
       </FormItem>
       <FormItem prop="cultureLevelType" label="文化程度">
-        <Input type="text" v-model="formInline.cultureLevelType"  style="width: 250px" placeholder="文化程度">
+        <!-- <Input type="text" v-model="formInline.cultureLevelType"  style="width: 250px" placeholder="文化程度">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        </Input> -->
+        <Select v-model="formInline.cultureLevelType" style="width:250px" placeholder="文化程度">
+          <Option v-for="item in cultureLevelTypeList.info" :value="item.id" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </FormItem>
       <FormItem prop="Specialty" label="特长">
         <Input type="text" v-model="formInline.Specialty"  style="width: 250px" placeholder="特长">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
-      </FormItem>
-      <FormItem prop="hasBadMedicalHistory" label="是否有重大病史">
-        <Input type="text" v-model="formInline.hasBadMedicalHistory"  style="width: 250px" placeholder="是否有重大病史">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
@@ -125,14 +125,30 @@
         </Input>
       </FormItem>
       <FormItem prop="workDate" label="开始工作日期">
-        <Input type="text" v-model="formInline.workDate"  style="width: 250px" placeholder="开始工作日期">
+        <DatePicker type="date" placeholder="开始工作日期" v-model="formInline.workDate" style="width: 250px"></DatePicker>
+        <!-- <Input type="text"  style="width: 250px" placeholder="开始工作日期">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        </Input> -->
       </FormItem>
       <FormItem prop="maritalStatus" label="婚姻状况">
-        <Input type="text" v-model="formInline.maritalStatus"  style="width: 250px" placeholder="婚姻状况">
+        <!-- <Input type="text" v-model="formInline.maritalStatus"  style="width: 250px" placeholder="婚姻状况">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        </Input> -->
+        <Select v-model="formInline.maritalStatus" style="width:250px" placeholder="婚姻状况">
+          <Option  value="01">未婚</Option>
+          <Option  value="02">已婚</Option>
+          <Option  value="03">离异</Option>
+          <Option  value="04">丧偶</Option>
+        </Select>
+      </FormItem>
+      <FormItem prop="hasBadMedicalHistory" label="是否有重大病史">
+        <!-- <Input type="text" v-model="formInline.hasBadMedicalHistory"  style="width: 250px" placeholder="是否有重大病史">
+          <Icon type="ios-person-outline" slot="prepend"></Icon>
+        </Input> -->
+        <RadioGroup v-model="formInline.hasBadMedicalHistory">
+          <Radio label="1">是</Radio>
+          <Radio label="0">否</Radio>
+        </RadioGroup>
       </FormItem>
       <FormItem prop="isTeamLeader" label="是否班组长">
         <RadioGroup v-model="formInline.isTeamLeader">
@@ -164,10 +180,11 @@
 
 <script>
   import siteSelect from '_c/siteSelect/siteSelect.vue'
-  import { getAdminsList } from '@/api/login/checkIn/fillInTheForm'
+  import { add } from '@/api/constructionOrganizationAdmin/workerAdmin/addWorker'
   import idCard from '_c/idCard'
-  import { cultureLevelType, workerType, importFile } from '@/api/public'
+  import { cultureLevelType, workerType, importFile, workRole, politicsType } from '@/api/public'
   import uploadMultiple from '_c/uploadMultiple'
+  import clonedeep from 'clonedeep'
   export default {
     components: {
       siteSelect,
@@ -175,13 +192,13 @@
       uploadMultiple
     },
     data () {
-      // const validaAccountPhone = (rule, value, callback) => {
-      //   if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(value))) {
-      //     callback(new Error('请输入正确的手机号'))
-      //   } else {
-      //     callback()
-      //   }
-      // }
+      const validaAccountPhone = (rule, value, callback) => {
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(value))) {
+          callback(new Error('请输入正确的手机号'))
+        } else {
+          callback()
+        }
+      }
       // 效验身份证
       const identityCard = (rule, value, callback) => {
         if (value !== '') {
@@ -240,31 +257,60 @@
             { required: true, message: '证件号码不能为空', trigger: 'blur' }
           ],
           workType: [
-            { required: true, message: '当前工种不能为空', trigger: 'blur' }
+            { required: true, message: '当前工种不能为空', trigger: 'change' }
+          ],
+          workRole: [
+            { required: true, message: '工人类型不能为空', trigger: 'change' }
+          ],
+          nation: [
+            { required: true, message: '民族不能为空', trigger: 'blur' }
+          ],
+          address: [
+            { required: true, message: '住址不能为空', trigger: 'blur' }
+          ],
+          headImage: [
+            { required: true, message: '头像不能为空', trigger: 'change' }
+          ],
+          politicsType: [
+            { required: true, message: '政治面貌不能为空', trigger: 'change' }
+          ],
+          cellPhone: [
+            { required: true, message: '手机号码不能为空', trigger: 'blur' },
+            { validator: validaAccountPhone, trigger: 'blur' },
+          ],
+          cultureLevelType: [
+            { required: true, message: '文化程度不能为空', trigger: 'blur' }
+          ],
+          grantOrg: [
+            { required: true, message: '发证机关不能为空', trigger: 'blur' }
           ]
         },
         loading: false,
         selectListBank: [],
         cultureLevelTypeList: [],
         workerTypeList: [],
-
+        workRoleList: [],
+        politicsTypeList: []
       }
     },
     props: {
-      dLoginNameValue: {
-        type: String,
-        default: ''
+      projectCorpId: {
+        type: Number
       }
     },
     methods: {
+      // 获得数据字典
       async getDictionaries () {
         try {
           this.workerTypeList = await workerType().then().catch()
           this.cultureLevelTypeList = await cultureLevelType().then().catch()
+          this.workRoleList = await workRole().then().catch()
+          this.politicsTypeList = await politicsType().then().catch()
         } catch (e) {
           console.log(e)
         }
       },
+      // 读取身份证赋值
       async getCallData (e) {
         try {
           let imgUrl = await importFile(e.imgValue).then().catch()
@@ -276,19 +322,41 @@
           this.formInline.headImage = imgUrl.info.split('/')[3]
           this.formInline.startDate = e.userlifebValue
           this.formInline.expiryDate = e.userlifeeValue
-          this.formInline.startDate = e.police
+          this.formInline.grantOrg = e.police
         } catch (e) {
           console.log(e)
         }
       },
+      // 提交表单
       handleSubmit () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
-            this.$Message.success('Success!')
+            let formInlineNew = clonedeep(this.formInline)
+            formInlineNew.projectCropTeamId = this.projectCorpId
+            formInlineNew.startDate = formInlineNew.startDate ? new Date(formInlineNew.startDate).Format("yyyy-MM-dd") : ''
+            formInlineNew.expiryDate = formInlineNew.expiryDate ? new Date(formInlineNew.expiryDate).Format("yyyy-MM-dd") : ''
+            formInlineNew.headImage = formInlineNew.headImage ? this.addImgBase(formInlineNew.headImage) : ''
+            try {
+              add(formInlineNew).then(res => {
+                this.$Message.success('添加成功')
+                this.$emit('submitState', true)
+              }).catch(err => {
+                this.$Message.error(err)
+                this.$emit('submitState', false)
+              })
+            } catch(e) {
+              console.log(e)
+              this.$emit('submitState', false)
+            }
           } else {
-            this.$Message.error('Fail!')
+            this.$Message.error('请完善信息')
+            this.$emit('submitState', false)
           }
         })
+      },
+      // 清空表单
+      handleReset () {
+         this.$refs.formValidate.resetFields()
       }
     },
     mounted () {

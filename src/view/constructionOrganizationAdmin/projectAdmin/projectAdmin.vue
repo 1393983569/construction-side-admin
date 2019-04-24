@@ -90,30 +90,12 @@ export default({
             if (params.row.pstate + '' === '1' && params.row.bondState + '' === '1' && params.row.grantState + '' === '1') {
               stateDisabled = false
             }
-            console.log(stateDisabled)
             return h('div', [
               h(contractorAdmin, {
                 props: {
                   projectCode: params.row.projectCode
                 }
-              }),
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px',
-                  margin: '8px 0'
-                },
-                on: {
-                  click: () => {
-                    this.$refs.addWorker.emptyForm()
-                    this.pid = params.row.pid
-                    this.addModalWorker = true
-                  }
-                }
-              }, '查看项目参建单位')
+              })
             ])
           }
         }
