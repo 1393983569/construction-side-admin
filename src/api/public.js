@@ -101,3 +101,10 @@ export const politicsType = () => {
     method: 'get'
   })
 }
+
+export const getBankList = (accountType) => {
+  return axios.request({
+    url: `getAdminsList?accountType=${accountType}`,
+    method: 'get'
+  })
+}

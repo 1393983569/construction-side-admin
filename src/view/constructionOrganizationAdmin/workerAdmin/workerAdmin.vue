@@ -31,10 +31,17 @@
       :mask-closable='false'
       title="上传工资"
       width="900">
-      <uploadSalary ref="uploadSalaryRef" @submitState="submitStateEdit" :row="rowObj" :projectCorpId="wId + ''" ></uploadSalary>
+      <uploadSalary ref="uploadSalaryRef" @submitState="submitStateUpload" :row="rowObj" :wId="wId + ''" ></uploadSalary>
       <div slot="footer">
         <Button type="primary" :loading="loading_uploadSalaryS" @click="uploadSalarySOk" >提交</Button>
       </div>
+    </Modal>
+    <Modal
+      v-model="checkingInState"
+      :mask-closable='false'
+      title="考勤记录"
+      width="900">
+      <checking-in ref="checkingInRef" :wId="wId"></checking-in>
     </Modal>
   </div>
 </template>
@@ -50,15 +57,18 @@ import { workerType } from '@/api/public'
 import addContract from './components/addContract'
 // 添加/修改 工人
 import addWorker from '../projectAdmin/components/addWorker'
+// 上传工资
 import uploadSalary from './components/uploadSalary'
-
+// 考勤记录
+import checkingIn from './components/checking-in'
 export default({
   components: {
     editableTables,
     clickImg,
     addContract,
     addWorker,
-    uploadSalary
+    uploadSalary,
+    checkingIn
   },
   data () {
     return {
@@ -187,6 +197,7 @@ export default({
                     this.wId = params.row.id + ''
                     // 清除add状态
                     this.$refs.uploadSalaryRef.handleReset()
+                    this.$refs.uploadSalaryRef.getDictionaries()
                   }
                 }
               }, '上传工资'),
@@ -202,10 +213,8 @@ export default({
                 },
                 on: {
                   click: () => {
-                    this.uploadSalaryState = true
-                    this.wId = params.row.id + ''
-                    // 清除add状态
-                    this.$refs.uploadSalaryRef.handleReset()
+                    this.checkingInState = true
+                    this.$refs.checkingInRef.getList(params.row.id)
                   }
                 }
               }, '查看考勤'),
@@ -249,7 +258,8 @@ export default({
       modificationWorkerState: false,
       loading_edit: false,
       uploadSalaryState: false,
-      loading_uploadSalaryS: false
+      loading_uploadSalaryS: false,
+      checkingInState: false,
     }
   },
   methods: {
@@ -337,10 +347,10 @@ export default({
     },
     // 提交工资
     uploadSalarySOk () {
-      this.uploadSalaryState = true
+      this.loading_uploadSalaryS = true
       this.$refs.uploadSalaryRef.handleSubmit()
     },
-    submitStateEdit (e) {
+    submitStateUpload (e) {
       console.log(e)
       // 提交成功
       if (e) {

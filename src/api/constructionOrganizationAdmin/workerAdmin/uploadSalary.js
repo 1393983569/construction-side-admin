@@ -6,14 +6,11 @@ import axios from '@/libs/api.request'
  */
 export const add = (obj) => {
   let params = new URLSearchParams()
-  let data = {}
   for (let key in obj) {
-    if (obj[key]) data[key] = obj[key]
+    if (obj[key]) params.append(key, obj[key])
   }
-  data = JSON.stringify(data)
-  params.append('object', data)
   return axios.request({
-    url: 'workerContract/add',
+    url: 'proBank/add',
     data: params,
     method: 'post'
   })
