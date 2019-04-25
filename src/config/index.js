@@ -30,8 +30,8 @@ export default {
     // pro: 'http://servicezhgd.yungoux.com/admin',
     pro: 'http://192.168.31.229:8081/admin',
     // 七牛旧图片上传组件回显地址
-    qiniuUrl: 'http://qiniu.dnwapp.com/',
+    qiniuUrl: 'http://qiniu-gongdi.lz-cc.com/',
     // 七牛新图片上传组件回显地址
-    qiniuBaseUrl: 'http://qiniu.dnwapp.com'
+    qiniuBaseUrl: 'http://qiniu-gongdi.lz-cc.com'
   }
 }

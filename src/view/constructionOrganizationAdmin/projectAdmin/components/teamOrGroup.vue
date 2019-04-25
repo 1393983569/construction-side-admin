@@ -8,7 +8,7 @@
       title="添加工人"
       :mask-closable="false"
       width="900">
-      <addWorker ref="addWorkerRef" @submitState="submitState" :projectCorpId="teamOrGroupId"></addWorker>
+      <addWorker ref="addWorkerRef" @submitState="submitState" :projectCorpId="teamOrGroupId + ''"></addWorker>
       <div slot="footer">
         <Button type="primary" :loading="loading" @click="addWorkerOk">提交</Button>
       </div>
@@ -81,7 +81,7 @@
                     click: () => {
                       console.log(params.row.teamSysNo)
                       this.modalMessage = true
-                      this.teamOrGroupId = params.row.teamSysNo
+                      this.teamOrGroupId = params.row.teamSysNo + ''
                       this.$refs.addWorkerRef.getDictionaries()
                       this.$refs.addWorkerRef.handleReset()
                     }

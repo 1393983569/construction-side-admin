@@ -20,7 +20,7 @@
       :mask-closable='false'
       title="添加班组"
       width="900">
-      <addProjectWorker ref="addWorker" @formState="formSuccessWorker" :projectCode="listCodeId"></addProjectWorker>
+      <addProjectWorker ref="addWorker" @formState="formSuccessWorker" :projectCode="listCodeId + ''"></addProjectWorker>
       <div slot="footer">
         <Button type="primary" :loading="loading" @click="addWorkerOk">提交</Button>
       </div>
@@ -97,7 +97,7 @@ export default {
   },
   props: {
     projectCode: {
-      default: ''
+      type: String
     },
     disabled: Boolean
   },
@@ -262,7 +262,7 @@ export default {
         if (valid) {
           this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd")
           this.formInline.exitTime = new Date(this.formInline.exitTime).Format("yyyy-MM-dd")
-          this.formInline.projectCode = this.projectCode
+          this.formInline.projectCode = this.projectCode + ''
           addUnity(this.formInline).then(res => {
             this.add_loading = false
             this.$refs['formInline'].resetFields()

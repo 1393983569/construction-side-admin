@@ -119,7 +119,7 @@ export default {
       default: ''
     },
     projectCode: {
-      type: Number
+      type: String
     }
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
          console.log(e)
        }
         if (valid) {
-          this.formInline.projectCorpId = this.projectCode
+          this.formInline.projectCorpId = this.projectCode + ''
           if (this.formInline.entryTime) {
             this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd")
           }
@@ -184,7 +184,7 @@ export default {
     },
     // 清空
     handleReset () {
-        this.$refs.formValidate.resetFields()
+        this.$refs.formInline.resetFields()
     },
     updateImgcontract (img) {
       this.formInline.contract.push(img)

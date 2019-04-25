@@ -135,14 +135,26 @@ export default {
       let obj = {}
       this.newList.split(',').forEach(item => {
         let name = ''
-        if (item.includes('.jpg') || item.includes('.jpeg') || item.includes('.png')) {
-          name = item.split('.')[0]
+        let newName = ''
+        let url = ''
+        // 判断是否为全路径
+        if (item.includes('http://')) {
+          url = item
+          newName = item.split('/')[3]
         } else {
-          name = item
+          url = this.addImgBase(item)
+          newName = item
         }
+        if (newName.includes('.jpg') || newName.includes('.jpeg') || newName.includes('.png')) {
+          name = newName.split('.')[0]
+        } else {
+          name = newName
+        }
+        // console.log(item.split('/'))
+        // console.log('name:',name, 'url:', url, 'newName:', newName, 'item:', item)
         this.uploadList.push({
           name: name,
-          url: this.addImgBase(item),
+          url,
           status: 'finished'
         })
       })

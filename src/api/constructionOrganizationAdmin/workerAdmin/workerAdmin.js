@@ -26,6 +26,11 @@ export const getPageListOfWorker = (pageNum, selectValue) => {
   })
 }
 
+/**
+ * 查询工人列表
+ * @param {*} pageNum
+ * @param {*} selectValue
+ */
 export const workerQuery = (pageNum, selectValue) => {
   let params = new URLSearchParams()
   params.append('pageNum', pageNum)

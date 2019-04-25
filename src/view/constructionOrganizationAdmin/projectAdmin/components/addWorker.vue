@@ -24,22 +24,25 @@
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
+      <FormItem prop="birthday" label="出生日期">
+        <DatePicker type="date" placeholder="开始工作日期" v-model="formInline.birthday" style="width: 250px"></DatePicker>
+      </FormItem>
       <FormItem prop="grantOrg" label="发证机关">
         <Input type="text" v-model="formInline.grantOrg"  style="width: 250px" placeholder="发证机关">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
       <FormItem prop="startDate" label="证件有效期开始日期">
-        <!-- <Input type="text" v-model="formInline.startDate"  style="width: 250px" placeholder="证件有效期开始日期">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
         <DatePicker type="date" placeholder="证件有效期开始日期" v-model="formInline.startDate" style="width: 250px"></DatePicker>
       </FormItem>
       <FormItem prop="startDate" label="证件有效期结束日期">
         <DatePicker type="date" placeholder="证件有效期结束日期" v-model="formInline.expiryDate" style="width: 250px"></DatePicker>
-        <!-- <Input type="text" v-model="formInline.expiryDate"  style="width: 250px" placeholder="证件有效期结束日期">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
+      </FormItem>
+         <FormItem prop="gender" label="性别">
+        <Select v-model="formInline.gender" style="width:250px" placeholder="性别">
+          <Option  value="男">男</Option>
+          <Option  value="女">女</Option>
+        </Select>
       </FormItem>
       <FormItem prop="workType" label="当前工种">
         <Select v-model="formInline.workType" style="width:250px" placeholder="当前工种">
@@ -102,9 +105,6 @@
         </Input>
       </FormItem>
       <FormItem prop="cultureLevelType" label="文化程度">
-        <!-- <Input type="text" v-model="formInline.cultureLevelType"  style="width: 250px" placeholder="文化程度">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
         <Select v-model="formInline.cultureLevelType" style="width:250px" placeholder="文化程度">
           <Option v-for="item in cultureLevelTypeList.info" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
@@ -115,7 +115,7 @@
         </Input>
       </FormItem>
       <FormItem prop="urgentLinkMan" label="紧急联系人姓名">
-        <Input type="text" v-model="formInline.urgentLinkMan"  style="width: 250px" placeholder="特长">
+        <Input type="text" v-model="formInline.urgentLinkMan"  style="width: 250px" placeholder="紧急联系人姓名">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
@@ -126,14 +126,8 @@
       </FormItem>
       <FormItem prop="workDate" label="开始工作日期">
         <DatePicker type="date" placeholder="开始工作日期" v-model="formInline.workDate" style="width: 250px"></DatePicker>
-        <!-- <Input type="text"  style="width: 250px" placeholder="开始工作日期">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
       </FormItem>
       <FormItem prop="maritalStatus" label="婚姻状况">
-        <!-- <Input type="text" v-model="formInline.maritalStatus"  style="width: 250px" placeholder="婚姻状况">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
         <Select v-model="formInline.maritalStatus" style="width:250px" placeholder="婚姻状况">
           <Option  value="01">未婚</Option>
           <Option  value="02">已婚</Option>
@@ -142,9 +136,6 @@
         </Select>
       </FormItem>
       <FormItem prop="hasBadMedicalHistory" label="是否有重大病史">
-        <!-- <Input type="text" v-model="formInline.hasBadMedicalHistory"  style="width: 250px" placeholder="是否有重大病史">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
         <RadioGroup v-model="formInline.hasBadMedicalHistory">
           <Radio label="1">是</Radio>
           <Radio label="0">否</Radio>
@@ -180,11 +171,12 @@
 
 <script>
   import siteSelect from '_c/siteSelect/siteSelect.vue'
-  import { add } from '@/api/constructionOrganizationAdmin/workerAdmin/addWorker'
+  import { workerAdd, workerEdit } from '@/api/constructionOrganizationAdmin/workerAdmin/addContract'
   import idCard from '_c/idCard'
   import { cultureLevelType, workerType, importFile, workRole, politicsType } from '@/api/public'
   import uploadMultiple from '_c/uploadMultiple'
   import clonedeep from 'clonedeep'
+  import { getAges } from '@/libs/util'
   export default {
     components: {
       siteSelect,
@@ -243,7 +235,9 @@
           positiveIDCardImage: '',
           negativeIDCardImage: '',
           startDate: '',
-          expiryDate: ''
+          expiryDate: '',
+          birthday: '',
+          gender: ''
         },
         ruleInline: {
           workerName: [
@@ -283,6 +277,9 @@
           ],
           grantOrg: [
             { required: true, message: '发证机关不能为空', trigger: 'blur' }
+          ],
+          gender: [
+            { required: true, message: '性别不能为空', trigger: 'blur' }
           ]
         },
         loading: false,
@@ -295,7 +292,13 @@
     },
     props: {
       projectCorpId: {
-        type: Number
+        type: String
+      },
+      row: {
+        type: Object
+      },
+      apiState: {
+        type: Boolean
       }
     },
     methods: {
@@ -323,6 +326,9 @@
           this.formInline.startDate = e.userlifebValue
           this.formInline.expiryDate = e.userlifeeValue
           this.formInline.grantOrg = e.police
+          this.formInline.birthday = e.bornDate
+          this.formInline.age = getAges(e.bornDate)
+          console.log(this.formInline.age)
         } catch (e) {
           console.log(e)
         }
@@ -332,18 +338,34 @@
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
             let formInlineNew = clonedeep(this.formInline)
-            formInlineNew.projectCropTeamId = this.projectCorpId
+            formInlineNew.projectCropTeamId = this.projectCorpId + ''
             formInlineNew.startDate = formInlineNew.startDate ? new Date(formInlineNew.startDate).Format("yyyy-MM-dd") : ''
             formInlineNew.expiryDate = formInlineNew.expiryDate ? new Date(formInlineNew.expiryDate).Format("yyyy-MM-dd") : ''
-            formInlineNew.headImage = formInlineNew.headImage ? this.addImgBase(formInlineNew.headImage) : ''
+            formInlineNew.birthday = formInlineNew.birthday ? new Date(formInlineNew.birthday).Format("yyyy-MM-dd") : ''
+             if (formInlineNew.headImage && !formInlineNew.headImage.includes('http://')) {
+              formInlineNew.headImage = this.addImgBase(formInlineNew.headImage)
+            }
+
             try {
-              add(formInlineNew).then(res => {
-                this.$Message.success('添加成功')
-                this.$emit('submitState', true)
-              }).catch(err => {
-                this.$Message.error(err)
-                this.$emit('submitState', false)
-              })
+              // 判断是否为修改
+              if (this.apiState) {
+                formInlineNew.wid = this.projectCorpId + ''
+                workerEdit(formInlineNew).then(res => {
+                  this.$Message.success('修改成功')
+                  this.$emit('submitState', true)
+                }).catch(err => {
+                  this.$Message.error(err)
+                  this.$emit('submitState', false)
+                })
+              } else {
+                workerAdd(formInlineNew).then(res => {
+                  this.$Message.success('添加成功')
+                  this.$emit('submitState', true)
+                }).catch(err => {
+                  this.$Message.error(err)
+                  this.$emit('submitState', false)
+                })
+              }
             } catch(e) {
               console.log(e)
               this.$emit('submitState', false)
@@ -361,6 +383,11 @@
     },
     mounted () {
       //
+    },
+    watch: {
+      row (e) {
+        this.formInline = e
+      }
     }
   }
 </script>

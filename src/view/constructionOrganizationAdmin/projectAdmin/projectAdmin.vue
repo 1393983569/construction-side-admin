@@ -3,14 +3,6 @@
     <div>
       <editableTables :showHeader="true" :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
       </editableTables>
-      <Modal
-        v-model="showWorker"
-        :mask-closable='false'
-        @on-cancel="emptyFormCancel"
-        title="查看工人"
-        width="900">
-        <showWorkerList ref="refShowWorker" @formState="formSuccessWorker" :pid="pidShowWorkerList"></showWorkerList>
-      </Modal>
     </div>
   </div>
 </template>
@@ -20,7 +12,6 @@ import editableTables from '_c/editableTables/editableTables'
 import { getPageList } from '@/api/constructionOrganizationAdmin/projectAdmin/projectAdmin'
 import projectAdd from './projectAdd'
 import addProjectWorker from './addProjectWorker'
-import showWorkerList from './showWorker'
 import contractorAdmin from './contractorAdmin'
 import projectAdminSelect from '../../advancedFilter-components/projectAdminSelect'
 import projectAdminList from './components/projectAdminList'
@@ -29,7 +20,6 @@ export default({
     editableTables,
     projectAdd,
     addProjectWorker,
-    showWorkerList,
     projectAdminSelect,
     contractorAdmin,
     projectAdminList
@@ -93,7 +83,7 @@ export default({
             return h('div', [
               h(contractorAdmin, {
                 props: {
-                  projectCode: params.row.projectCode
+                  projectCode: params.row.projectCode + ''
                 }
               })
             ])

@@ -1,8 +1,7 @@
 <template>
   <div>
     <div>
-      <editableTables :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
-        <Button type="primary" style="margin-right: 10px" @click="addWorker">添加工人</Button>
+      <editableTables  :columns='columns' :showHeader="false" :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
         <span>姓名：</span>
         <Input search placeholder="请填写姓名" style="width: 150px;" @on-search="clickSearch" />
       </editableTables>
@@ -10,11 +9,31 @@
     <Modal
       v-model="addModal"
       :mask-closable='false'
-      title="添加工人"
+      title="合同上传"
       width="600">
-      <addWorker ref="addWorker" :dataList="modificationList" @formState="formSuccess" @controlState="controlState" ></addWorker>
+      <addContract ref="addContractRes" @submitState="submitState" :projectCorpId="wId"></addContract>
       <div slot="footer">
-        <Button type="primary" :loading="loading" @click="addOk" :disabled="disabled">提交</Button>
+        <Button type="primary" :loading="loading" @click="addOk" >提交</Button>
+      </div>
+    </Modal>
+    <Modal
+      v-model="modificationWorkerState"
+      :mask-closable='false'
+      title="修改信息"
+      width="900">
+      <addWorker ref="addWorkerRef" @submitState="submitStateEdit" :apiState="true" :row="rowObj" :projectCorpId="wId + ''" ></addWorker>
+      <div slot="footer">
+        <Button type="primary" :loading="loading_edit" @click="editOk" >提交</Button>
+      </div>
+    </Modal>
+     <Modal
+      v-model="uploadSalaryState"
+      :mask-closable='false'
+      title="上传工资"
+      width="900">
+      <uploadSalary ref="uploadSalaryRef" @submitState="submitStateEdit" :row="rowObj" :projectCorpId="wId + ''" ></uploadSalary>
+      <div slot="footer">
+        <Button type="primary" :loading="loading_uploadSalaryS" @click="uploadSalarySOk" >提交</Button>
       </div>
     </Modal>
   </div>
@@ -22,86 +41,116 @@
 <script>
 // 基本模板
 import editableTables from '_c/editableTables/editableTables.vue'
+import clonedeep from 'clonedeep'
 import { workerQuery } from '@/api/constructionOrganizationAdmin/workerAdmin/workerAdmin'
 import clickImg from '_c/clickImg'
-import addWorker from './addWorker'
+import { aesDecrypt } from '@/libs/util'
+import { workerType } from '@/api/public'
+// 添加合同
+import addContract from './components/addContract'
+// 添加/修改 工人
+import addWorker from '../projectAdmin/components/addWorker'
+import uploadSalary from './components/uploadSalary'
+
 export default({
   components: {
     editableTables,
     clickImg,
-    addWorker
+    addContract,
+    addWorker,
+    uploadSalary
   },
   data () {
     return {
       columns: [
         {
-          title: '工人姓名',
-          key: 'workerName'
-        },
-        {
-          title: '性别',
-          key: 'sex',
+          title: '基本信息',
+          key: 'JBXX',
+          width: 140,
           render: (h, params) => {
-            let htmlText = params.row.sex + '' === '1' ? '<span>男</span>' : '<span>女</span>'
             return (
-              <div domPropsInnerHTML={htmlText}></div>
+              <div style="padding: 5px; width: 102px; height: 126px;">
+                <img src={params.row.headImage} />
+              </div>
             )
           }
         },
         {
-          title: '身份证号',
-          key: 'idCardNum'
-        },
-        {
-          title: '身份证正面',
-          key: 'idFront',
-          width: 120,
+          title: '基本信息',
+          key: 'JBXX',
           render: (h, params) => {
-            if (params.row.idFront) {
-              return h('div', [
-                h(clickImg, {
-                  props: {
-                    rePic: [params.row.idFront],
-                    cancelShow: false
-                  }
-                })
-              ])
-            } else {
-              return (
-                <div>暂无数据</div>
-              )
-            }
+            return (
+              <div>
+                <div style="cursor: pointer" >
+                  <span style="color: #2D8cF0; font-weight: 700">{params.row.workerName} </span>
+                  <tooltip content="修改工人信息">
+                    <icon type="ios-create" style="font-size: 16px; color: #2D8cF0;" on-click={this.modificationWorker.bind(this, params.row)}/>
+                  </tooltip>
+                  <tooltip content="查看合同">
+                    <icon type="ios-eye" style="font-size: 20px; color: #2D8cF0;"/>
+                  </tooltip>
+                </div>
+                 <div>
+                  <b>民族：</b>
+                  <span>{params.row.nation}</span>
+                </div>
+                <div>
+                  <b>身份证号：</b>
+                  <span>{aesDecrypt(params.row.idCardNumber)}</span>
+                </div>
+              </div>
+            )
           }
         },
         {
-          title: '身份证反面',
-          key: 'idBack',
-          width: 120,
+          title: '基本信息2',
+          key: 'JBXX2',
           render: (h, params) => {
-            if (params.row.idBack) {
-              return h('div', [
-                h(clickImg, {
-                  props: {
-                    rePic: [params.row.idBack],
-                    cancelShow: false
-                  }
-                })
-              ])
-            } else {
-              return (
-                <div>暂无数据</div>
-              )
-            }
+            return (
+              <div>
+                <div>
+                  <b>工种：</b>
+                  <span>{params.row.workerName}</span>
+                </div>
+                 <div>
+                  <b>是否班组长：</b>
+                  {params.row.isTeamLeader === 1 ? <span>是</span> : <span>否</span>}
+                </div>
+                <div>
+                  <b>当前所在企业：</b>
+                  <span>{params.row.corpName}</span>
+                </div>
+              </div>
+            )
           }
         },
         {
-          title: '住址',
-          key: 'liveAddr'
+          title: '基本信息3',
+          key: 'JBXX3',
+          render: (h, params) => {
+            return (
+              <div>
+                <div>
+                  <b>年龄：</b>
+                    {params.row.age ? <span>{params.row.age}</span> : <span>暂无数据</span>}
+                </div>
+                 <div>
+                  <b>性别：</b>
+                  {params.row.gender ? <span>{params.row.gender}</span> : <span>暂无数据</span>}
+                </div>
+                <div>
+                  <b>住址：</b>
+                  <span>{params.row.address}</span>
+                </div>
+              </div>
+            )
+          }
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -110,18 +159,75 @@ export default({
                   size: 'small'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginRight: '5px',
+                  verticalAlign: 'top'
                 },
                 on: {
                   click: () => {
                     this.addModal = true
-                    this.modificationList = params.row
-                    // 清除add状态
+                    this.wId = params.row.id + ''
                     this.apiState = ''
-                    this.$refs.addWorker.cardSubmit('formIdCard', params.row.idCardNum)
+                    // 清除add状态
+                    this.$refs.addContractRes.handleReset()
                   }
                 }
-              }, '修改')
+              }, '上传合同'),
+               h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px',
+                  // display: 'block'
+                },
+                on: {
+                  click: () => {
+                    this.uploadSalaryState = true
+                    this.wId = params.row.id + ''
+                    // 清除add状态
+                    this.$refs.uploadSalaryRef.handleReset()
+                  }
+                }
+              }, '上传工资'),
+                h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px',
+                  marginTop: '5px',
+                  // display: 'block'
+                },
+                on: {
+                  click: () => {
+                    this.uploadSalaryState = true
+                    this.wId = params.row.id + ''
+                    // 清除add状态
+                    this.$refs.uploadSalaryRef.handleReset()
+                  }
+                }
+              }, '查看考勤'),
+                 h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px',
+                  marginTop: '5px',
+                  // display: 'block'
+                },
+                on: {
+                  click: () => {
+                    this.uploadSalaryState = true
+                    this.wId = params.row.id + ''
+                    // 清除add状态
+                    this.$refs.uploadSalaryRef.handleReset()
+                  }
+                }
+              }, '培训管理')
             ])
           }
         }
@@ -136,9 +242,14 @@ export default({
       // 需求参数
       addModal: false,
       loading: false,
-      modificationList: [],
       apiState: '',
-      disabled: true
+      workerTypeList: [],
+      wId: '',
+      rowObj: {},
+      modificationWorkerState: false,
+      loading_edit: false,
+      uploadSalaryState: false,
+      loading_uploadSalaryS: false
     }
   },
   methods: {
@@ -169,26 +280,19 @@ export default({
     restoration () {
       this.pageNum = 1
     },
-    // 添加工人
-    addWorker () {
-      this.apiState = 'add'
-      this.$refs.addWorker.emptyForm()
-      this.addModal = true
-    },
     addOk () {
       this.loading = true
-      this.$refs.addWorker.handleSubmit('formInline', this.apiState)
-      setTimeout(() => {
-        this.loading = this.$refs.addWorker.loading
-      }, 500)
+      this.$refs.addContractRes.handleSubmit()
     },
-    formSuccess (e) {
+    submitState (e) {
+      // 提交成功
       if (e) {
         this.loading = false
         this.addModal = false
-        this.getList()
+      // 失败
       } else {
         this.loading = false
+        this.addModal = true
       }
     },
     clickSearch (e) {
@@ -196,13 +300,62 @@ export default({
       this.restoration()
       this.getList()
     },
-    controlState (e) {
-      this.disabled = e
+    async getWorkerTypeList () {
+      this.workerTypeList = await workerType().then().catch()
+      this.getList()
+    },
+    // 修改工人信息
+    modificationWorker (row) {
+      let rowData = clonedeep(row)
+      rowData.idCardNumber = aesDecrypt(rowData.idCardNumber)
+      rowData.hasBadMedicalHistory = rowData.hasBadMedicalHistory + ''
+      rowData.isTeamLeader = rowData.isTeamLeader + ''
+      rowData.workRole = rowData.workRole + ''
+      delete rowData._rowKey
+      this.wId = rowData.id + ''
+      this.modificationWorkerState = true
+      this.$refs.addWorkerRef.handleReset()  // 清空表单
+      this.rowObj = clonedeep(rowData)
+      this.$refs.addWorkerRef.getDictionaries()
+    },
+    // 提交工人修改
+    editOk () {
+      this.modificationWorkerState = true
+      this.$refs.addWorkerRef.handleSubmit()
+    },
+    submitStateEdit (e) {
+      console.log(e)
+      // 提交成功
+      if (e) {
+        this.loading_edit = false
+        this.modificationWorkerState = false
+      // 失败
+      } else {
+        this.loading_edit = false
+        this.modificationWorkerState = true
+      }
+    },
+    // 提交工资
+    uploadSalarySOk () {
+      this.uploadSalaryState = true
+      this.$refs.uploadSalaryRef.handleSubmit()
+    },
+    submitStateEdit (e) {
+      console.log(e)
+      // 提交成功
+      if (e) {
+        this.loading_uploadSalaryS = false
+        this.uploadSalaryState = false
+      // 失败
+      } else {
+        this.loading_uploadSalaryS = false
+        this.uploadSalaryState = true
+      }
     }
   },
   mounted () {
     // 初始化管理员列表
-    this.getList()
+    this.getWorkerTypeList()
   }
 })
 </script>
