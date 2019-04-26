@@ -31,18 +31,11 @@
         <Select v-model="formInline.payBankNameData" style="width:250px" placeholder="工资代发开户行名称">
           <Option v-for="item in bankList.info" :value="`${item.id}:${item.accountTitle}`" :key="item.id">{{ item.accountTitle }}</Option>
         </Select>
-        <!-- <Input type="text" v-model="formInline.payBankName"  style="width: 250px" placeholder="工资代发开户行名称">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input> -->
       </FormItem>
       <FormItem prop="totalPayAmount" label="应发金额(元)">
         <InputNumber type="text" :min="0" v-model="formInline.totalPayAmount"  style="width: 250px" placeholder="应发金额">
         </InputNumber>
       </FormItem>
-      <!-- <FormItem prop="actualAmount" label="实发金额(元)">
-        <InputNumber type="text" :min="0" v-model="formInline.actualAmount"  style="width: 250px" placeholder="实发金额">
-        </InputNumber>
-      </FormItem> -->
       <FormItem prop="thirdPayRollCode" label="第三方工资单编号">
         <Input type="text" v-model="formInline.thirdPayRollCode"  style="width: 250px" placeholder="第三方工资单编号">
         </Input>

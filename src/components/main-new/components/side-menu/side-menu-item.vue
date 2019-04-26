@@ -30,3 +30,6 @@ export default {
   mixins: [ mixin, itemMixin ]
 }
 </script>
+<style>
+
+</style>

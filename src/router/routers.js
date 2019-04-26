@@ -244,58 +244,58 @@ export default [
       // }
     ]
   },
-  // {
-  //   path: '/bankAdminFather',
-  //   name: 'bankAdminFather',
-  //   meta: {
-  //     access: ['银行管理'],
-  //     icon: '_yinhang',
-  //     title: '银行管理'
-  //   },
-  //   component: Main,
-  //   children: [
-  //     {
-  //       path: 'bankAdmin',
-  //       name: 'bankAdmin',
-  //       meta: {
-  //         access: ['银行管理Node'],
-  //         icon: '_yinhang',
-  //         title: '工资管理'
-  //       },
-  //       component: () => import('@/view/bankAdmin/bankAdmin.vue')
-  //     },
-  //     {
-  //       path: 'bankUser',
-  //       name: 'bankUser',
-  //       meta: {
-  //         access: ['银行用户管理'],
-  //         icon: '_yinhang',
-  //         title: '支行管理'
-  //       },
-  //       component: () => import('@/view/bankAdmin/userAdmin.vue')
-  //     },
-  //     {
-  //       path: 'cashDeposit',
-  //       name: 'cashDeposit',
-  //       meta: {
-  //         access: ['押金审核'],
-  //         icon: '_yinhang',
-  //         title: '资金审核'
-  //       },
-  //       component: () => import('@/view/bankAdmin/guaranteeDeposit.vue')
-  //     },
-  //     {
-  //       path: 'salaryFromBa',
-  //       name: 'salaryFromBa',
-  //       meta: {
-  //         access: ['总工资表'],
-  //         icon: '_yinhang',
-  //         title: '总工资表'
-  //       },
-  //       component: () => import('@/view/bankAdmin/salaryFrom.vue')
-  //     }
-  //   ]
-  // },
+  {
+    path: '/bankAdminFather',
+    name: 'bankAdminFather',
+    meta: {
+      // access: ['银行管理'],
+      icon: '_yinhang',
+      title: '银行管理'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'bankAdmin',
+        name: 'bankAdmin',
+        meta: {
+          // access: ['银行管理Node'],
+          icon: '_yinhang',
+          title: '工资管理'
+        },
+        component: () => import('@/view/bankAdmin/bankAdmin.vue')
+      },
+      {
+        path: 'bankUser',
+        name: 'bankUser',
+        meta: {
+          // access: ['银行用户管理'],
+          icon: '_yinhang',
+          title: '支行管理'
+        },
+        component: () => import('@/view/bankAdmin/userAdmin.vue')
+      },
+      {
+        path: 'cashDeposit',
+        name: 'cashDeposit',
+        meta: {
+          // access: ['押金审核'],
+          icon: '_yinhang',
+          title: '资金审核'
+        },
+        component: () => import('@/view/bankAdmin/guaranteeDeposit.vue')
+      },
+      {
+        path: 'salaryFromBa',
+        name: 'salaryFromBa',
+        meta: {
+          // access: ['总工资表'],
+          icon: '_yinhang',
+          title: '总工资表'
+        },
+        component: () => import('@/view/bankAdmin/salaryFrom.vue')
+      }
+    ]
+  },
   {
     path: '/401',
     name: 'error_401',

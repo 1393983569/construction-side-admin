@@ -11,26 +11,48 @@ export const getPropject = (did) => {
   })
 }
 
-// 不分页 查询施工单位列表
-export const getPageDepts = (type) => {
-  let params = new URLSearchParams()
-  params.append('pageSize', -1)
-  if (type) params.append('type', type)
+/**
+ * 查询当前银行可以看到的项目
+ */
+export const getListOfPro = () => {
   return axios.request({
-    url: 'dept/getPageDepts',
-    data: params,
-    method: 'post'
+    url: 'workerSalary/getListOfPro',
+    method: 'get'
+  })
+}
+
+/**
+ * 查询项目参建单位下拉列表
+ * @param {*} projectCode
+ */
+export const projectCorpGetList = (projectCode) => {
+  return axios.request({
+    url: `projectCorp/getList?projectCode=${projectCode}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 查询项目班组下拉列表
+ * @param {*} projectCode
+ */
+export const projectCorpTeamGetList = (projectCode) => {
+  return axios.request({
+    url: `projectCorpTeam/getList?projectCorpId=${projectCode}`,
+    method: 'get'
+  })
+}
+
+export const getPageListGetList = (projectCropTeamId) => {
+  return axios.request({
+    url: `proBank/getPageList?projectCropTeamId=${projectCropTeamId}`,
+    method: 'get'
   })
 }
 
 // （银行）查询时间下的工人
-export const workerSalaryGetPageList = (pageNum, state, pid, pbId) => {
+export const workerSalaryGetPageList = (pageNum, pbId) => {
   let params = new URLSearchParams()
-  // params.append('state', state)
-  for (let key in state) {
-    params.append(key, state[key])
-  }
-  // params.append('pid', pid)
   params.append('pageNum', pageNum)
   if (pbId) params.append('pbId', pbId)
   return axios.request({
@@ -66,13 +88,13 @@ export const getTime = (pid, state, dealState) => {
 }
 
 // 申请时间列表
-export const payOff = (pbId, pId, allSalary) => {
+export const payOff = (pbId, actualAmount) => {
   let params = new URLSearchParams()
-  params.append('pbId', pbId)
-  params.append('pId', pId)
-  params.append('allSalary', allSalary)
+  params.append('id', pbId)
+  // params.append('pId', pId)
+  params.append('actualAmount', actualAmount)
   return axios.request({
-    url: 'workerSalary/payOff',
+    url: 'workerSalary/edit',
     data: params,
     method: 'post'
   })
