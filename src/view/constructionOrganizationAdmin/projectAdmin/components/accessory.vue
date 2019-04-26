@@ -10,7 +10,7 @@
           <Icon type="ios-close-circle-outline" class="iconDel" @click="delList(index)" />
           <section style="width: 200px">
             <!--<uploadMultiple @succeedOk="imgSucceed" v-model="dataList[index].dataImg" style="display: inline-block"/>-->
-            <Upload action="//192.168.31.229:8081/admin/projectCorpTeam/importFile"
+            <Upload :action="`${configUrl}/projectCorpTeam/importFile`"
                     :on-success="fileSuccess"
                     type="drag"
                     style="display: inline-block; vertical-align: top; margin-top: 10px"
@@ -31,6 +31,7 @@
 
 <script>
   import uploadMultiple from '_c/uploadMultiple'
+  import config from '@/config'
   export default {
     name: "accessory",
     components: {
@@ -48,7 +49,8 @@
             data: ''
           }
         ],
-        indexData: ''
+        indexData: '',
+        configUrl: config.baseUrl.pro.replace("http:", ""),
       }
     },
     methods: {
