@@ -1,11 +1,16 @@
 <template>
-    $END$
+
 </template>
 
 <script>
-    export default {
-        name: "inquireComponents"
+  export default {
+    name: "inquireComponents",
+    data () {
+      return {
+
+      }
     }
+  }
 </script>
 
 <style scoped>

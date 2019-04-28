@@ -8,130 +8,129 @@
 <script>
 // 基本模板
 import editableTables from '_c/editableTables/editableTables.vue'
-import { getPageDepts, deptEditState } from '@/api/bankAdmin/guaranteeDeposit'
+import { projectGetPageList, projectAdd } from '@/api/bankAdmin/guaranteeDeposit'
 import clickImg from '_c/clickImg'
+import projectAdminList from './components/projectAdminList'
 export default({
   components: {
     editableTables,
-    clickImg
+    clickImg,
+    projectAdminList
   },
   data () {
     return {
       columns: [
         {
-          title: '项目名称',
-          key: 'projectName'
-        },
-        {
-          title: '项目地址',
-          key: 'projectAddr'
-        },
-        {
-          title: '建筑规模',
-          key: 'buildSize'
-        },
-        // {
-        //   title: '营业执照',
-        //   key: 'allowPic',
-        //   width: 200,
-        //   render: (h, params) => {
-        //     return h('div', [
-        //       h(clickImg, {
-        //         props: {
-        //           rePic: params.row.allowPic.split(','),
-        //           cancelShow: false
-        //         }
-        //       })
-        //     ])
-        //   }
-        // },
-        {
-          title: '投资规模',
-          key: 'investSize'
-        },
-        {
-          title: '项目类型',
-          key: 'projectType'
-        },
-        {
-          title: '投资人',
-          key: 'investMain'
-        },
-        {
-          title: '住建局状态',
-          key: 'stateZjj',
+          type: 'expand',
+          width: 50,
           render: (h, params) => {
-            let text = ''
-            if (params.row.pstate + '' === '1') {
-              text = '通过'
-            } else if (params.row.pstate + '' === '0') {
-              text = '未审核'
-            } else if (params.row.pstate + '' === '-1') {
-              text = '已结束'
-            } else {
-              text = '未通过'
-            }
-            return h('div', text)
+            return h(projectAdminList, {
+              props: {
+                row: params.row
+              }
+            })
+          }
+        },
+        {
+          title: '项目名',
+          key: 'name'
+        },
+        {
+          title: '项目编码',
+          key: 'projectCode'
+        },
+        {
+          title: '项目分类',
+          key: 'category'
+        },
+        {
+          title: '项目简介',
+          key: 'description'
+        },
+        {
+          title: '总承包单位统一社会信用代码',
+          key: 'contractorCorpCode'
+        },
+        {
+          title: '总承包单位名称',
+          key: 'contractorCorpName'
+        },
+        {
+          title: '建设单位名称',
+          key: 'buildCorpCode'
+        },
+        {
+          title: '建设单位统一社会信用代码',
+          key: 'buildCorpCode'
+        },
+        {
+          title: '发放金状态',
+          key: 'grantState',
+          render: (h, params) => {
+            return h('div', params.row.grantState + '' === '0' ? '未审核' : '通过')
+          }
+        },
+        {
+          title: '保证金状态',
+          key: 'bondState',
+          render: (h, params) => {
+            return h('div', params.row.bondState + '' === '0' ? '未审核' : '通过')
           }
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 250,
+          width: 150,
           render: (h, params) => {
             return h('div', [
               h('Button', {
                 props: {
                   type: 'primary',
                   size: 'small',
-                  disabled: params.row.grantState + '' === '1' || params.row.grantState + '' === '2'
+                  disabled: params.row.grantState + '' === '1'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginTop: '5px',
+                  marginBottom: '5px'
                 },
                 on: {
                   click: () => {
                     this.$Modal.confirm({
                       title: '提示',
-                      content: '确定提交吗？',
+                      content: '确认发放金已提交？',
                       onOk: () => {
-                        deptEditState(params.row.pid, '', 1)
-                          .then(res => {
-                            this.$Message.success('成功')
-                            this.getList(this.pageNum)
-                          })
-                          .catch(err => {
-                            this.$Message.error(err.msg)
-                          })
+                        projectAdd('', 1, params.row.id).then(res => {
+                          this.$Message.success('成功')
+                        }).catch(err => {
+                          this.$Message.error('失败')
+                        })
                       }
                     })
                   }
                 }
-              }, '确认工资款'),
+              }, '确认发放金'),
               h('Button', {
                 props: {
                   type: 'primary',
                   size: 'small',
-                  disabled: params.row.bondState + '' === '1' || params.row.bondState + '' === '2'
+                  disabled: params.row.bondState + '' === '1'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginTop: '5px',
+                  marginBottom: '5px'
                 },
                 on: {
                   click: () => {
                     this.$Modal.confirm({
                       title: '提示',
-                      content: '确定提交吗？',
+                      content: '确认保证金已提交？',
                       onOk: () => {
-                        deptEditState(params.row.pid, 1, '')
-                          .then(res => {
-                            this.$Message.success('成功')
-                            this.getList(this.pageNum)
-                          })
-                          .catch(err => {
-                            this.$Message.error(err.msg)
-                          })
+                        projectAdd(1, '', params.row.id).then(res => {
+                          this.$Message.success('成功')
+                        }).catch(err => {
+                          this.$Message.error('失败')
+                        })
                       }
                     })
                   }
@@ -155,7 +154,7 @@ export default({
     // 分页查询管理员
     getList () {
       this.dataList = []
-      getPageDepts(this.pageNum, this.selectValue).then(res => {
+      projectGetPageList(this.pageNum, this.selectValue).then(res => {
         this.dataList = []
         if (res.info === '暂无数据') {
           this.$Message.error(res.info)
@@ -163,7 +162,9 @@ export default({
           return
         }
         this.pageTotal = res.info.pageTotal
-        this.dataList.push(...res.info.data)
+        res.info.data.map((res) => {
+          this.dataList.push({...res})
+        })
       }).catch(err => {
         this.$Message.error(err)
       })

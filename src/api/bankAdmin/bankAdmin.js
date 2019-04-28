@@ -62,6 +62,18 @@ export const workerSalaryGetPageList = (pageNum, pbId) => {
   })
 }
 
+// (住建局使用)根据预警时间查询工人
+export const getPageListByOtherPageList = (pageNum, pbId) => {
+  let params = new URLSearchParams()
+  params.append('pageNum', pageNum)
+  if (pbId) params.append('pbId', pbId)
+  return axios.request({
+    url: 'workerSalary/getPageListByOther',
+    data: params,
+    method: 'post'
+  })
+}
+
 // 发工资
 export const payoff = (id) => {
   let params = new URLSearchParams()

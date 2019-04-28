@@ -32,3 +32,29 @@ export const workerGetPageList = (projectCode) => {
     method: 'post'
   })
 }
+
+/**
+ * 根据项目编码查询项目详情
+ * @param {*} projectCode
+ */
+export const projectQuery = (projectCode) => {
+  return axios.request({
+    url: `project/query?projectCode=${projectCode}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 添加主板编码
+ * @param {*} mainboardNum
+ */
+export const projectAddMainboardNum = (mainboardNum, projectCode) => {
+  let params = new URLSearchParams()
+  params.append('mainboardNum', mainboardNum)
+  params.append('projectCode', projectCode)
+  return axios.request({
+    url: 'project/add',
+    data: params,
+    method: 'post'
+  })
+}

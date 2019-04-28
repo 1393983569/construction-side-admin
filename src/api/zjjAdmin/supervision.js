@@ -24,3 +24,17 @@ export const getTime = (pid, dealState) => {
     method: 'post'
   })
 }
+
+export const getPageListOfWarnWorker = (pageNum, corpCode, projectCode, isBackPay) => {
+  let params = new URLSearchParams()
+  if (corpCode) params.append('corpCode', corpCode)
+  if (projectCode) params.append('projectCode', projectCode)
+  params.append('pageNum', pageNum)
+  params.append('pageSize', 10)
+  if (isBackPay) params.append('isBackPay', isBackPay)
+  return axios.request({
+    url: 'workerSalary/getPageListOfWarnWorker',
+    data: params,
+    method: 'post'
+  })
+}

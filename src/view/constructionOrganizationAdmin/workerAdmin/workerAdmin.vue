@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <queryCondition />
       <editableTables  :columns='columns' :showHeader="false" :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
         <span>姓名：</span>
         <Input search placeholder="请填写姓名" style="width: 150px;" @on-search="clickSearch" />
@@ -61,6 +62,8 @@ import addWorker from '../projectAdmin/components/addWorker'
 import uploadSalary from './components/uploadSalary'
 // 考勤记录
 import checkingIn from './components/checking-in'
+// 查询组件
+import queryCondition from './components/queryCondition'
 export default({
   components: {
     editableTables,
@@ -68,7 +71,8 @@ export default({
     addContract,
     addWorker,
     uploadSalary,
-    checkingIn
+    checkingIn,
+    queryCondition
   },
   data () {
     return {

@@ -1,5 +1,31 @@
 <template>
   <div>
+    <Button type="primary" @click="cancelProjectInit">添加项目</Button>
+    <Modal
+      v-model="projectAddState"
+      width="600"
+      title="实发工资">
+      <Form ref="formInlineProject" :model="formInlineProject" :rules="ruleInlineProject" inline>
+        <FormItem prop="projectCode" label="项目编码">
+          <div>
+            <Input type="text" @on-blur="blurProject" v-model="formInlineProject.projectCode" style="width: 250px" placeholder="项目编码"></Input>
+            <Spin style="display: inline-block" v-if="projectState">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+            </Spin>
+            <span v-if="projectExist">
+              <Icon type="md-checkmark" style="color: #19be6b; font-size: 18px"/>
+            </span>
+          </div>
+        </FormItem>
+        <FormItem prop="mainboardNum" label="主板编号">
+          <Input type="text" v-model="formInlineProject.mainboardNum" style="width: 250px" placeholder="主板编号"></Input>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="cancelProject">取消</Button>
+        <Button type="primary" :loading="project_loading" @click="projectSubmit">确定</Button>
+      </div>
+    </Modal>
     <div>
       <editableTables :showHeader="true" :columns='columns' :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
       </editableTables>
@@ -15,8 +41,8 @@
         <FormItem prop="trainingDuration" label="培训时长(小时)">
           <Input type="text" v-model="formInline.trainingDuration" style="width: 250px" placeholder="培训时长"></Input>
         </FormItem>
-        <FormItem prop="workerNum" label="培训名称">
-          <Input type="text" v-model="formInline.workerNum" style="width: 250px" placeholder="培训名称"></Input>
+        <FormItem prop="trainingName" label="培训名称">
+          <Input type="text" v-model="formInline.trainingName" style="width: 250px" placeholder="培训名称"></Input>
         </FormItem>
         <FormItem prop="trainingTypeCode" label="培训类型">
           <Select v-model="formInline.trainingTypeCode" style="width: 250px" placeholder="请选择工种" filterable >
@@ -66,14 +92,8 @@
           </div>
         </div>
       </Form>
-      <Transfer
-        :data="workerList"
-        :target-keys="targetKeys"
-        :list-style="listStyle"
-        :titles="transferTitles"
-        filterable
-        @on-change="handleChange"
-        ></Transfer>
+      <listSelecTimplement v-model="selectedList" :title="'工人列表'" :workerList="workerList" style="display: inline-block"/>
+      <Table height="355" :columns="columnsSelectedWorkerList" :data="selectedWorkerList" style="width: 560px; display: inline-block"></Table>
       <div slot="footer">
         <Button @click="cancelGrant">取消</Button>
         <Button type="primary" :loading="sumSalarySingle_loading" @click="accessorySubmit">确定</Button>
@@ -84,7 +104,7 @@
 <script>
 // 基本模板
 import editableTables from '_c/editableTables/editableTables'
-import { getPageList, workerGetPageList } from '@/api/constructionOrganizationAdmin/projectAdmin/projectAdmin'
+import { getPageList, workerGetPageList, trainAdd, projectQuery, projectAddMainboardNum } from '@/api/constructionOrganizationAdmin/projectAdmin/projectAdmin'
 import projectAdd from './projectAdd'
 import addProjectWorker from './addProjectWorker'
 import contractorAdmin from './contractorAdmin'
@@ -93,6 +113,7 @@ import projectAdminList from './components/projectAdminList'
 import config from '@/config'
 import clonedeep from 'clonedeep'
 import {aesDecrypt} from '@/libs/util'
+import listSelecTimplement from '_c/listSelecTimplement'
 export default({
   components: {
     editableTables,
@@ -100,7 +121,8 @@ export default({
     addProjectWorker,
     projectAdminSelect,
     contractorAdmin,
-    projectAdminList
+    projectAdminList,
+    listSelecTimplement
   },
   data () {
     return {
@@ -170,7 +192,8 @@ export default({
                   size: 'small'
                 },
                 style: {
-                  marginTop: '5px'
+                  marginTop: '5px',
+                  marginBottom: '5px'
                 },
                 on: {
                   click: () => {
@@ -211,6 +234,18 @@ export default({
           { required: true, message: '培训类型不能为空', trigger: 'change' }
         ]
       },
+      formInlineProject: {
+        projectCode: '',
+        mainboardNum: ''
+      },
+      ruleInlineProject: {
+        projectCode: [
+          { required: true, message: '项目编码', trigger: 'blur' }
+        ],
+        mainboardNum: [
+          { required: true, message: '主板编号', trigger: 'blur' }
+        ]
+      },
       // 基本参数
       dataList: [],
       // 查询参数
@@ -233,7 +268,67 @@ export default({
         height: '340px'
       },
       transferTitles: ['工人列表', '培训工人列表'],
-      workerList: []
+      workerList: [],
+      selectedList: [],
+      columnsSelectedWorkerList: [
+        {
+          title: '姓名',
+          key: 'data'
+        },
+        {
+          title: '身份证号',
+          key: 'idCardNumber'
+        },
+        {
+          title: '是否合格',
+          key: 'isPass',
+          render: (h, params) => {
+            return (
+              <div>
+                <i-select value={this.selectedWorkerList[params.index].isPass} on-on-change={this.trainQualified.bind(this, params.index)}>
+                  <i-option value="1">是</i-option>
+                  <i-option value="0">否</i-option>
+                </i-select>
+              </div>
+            )
+          }
+        },
+        {
+          title: '培训得分',
+          key: 'trainingScore',
+          render: (h, params) => {
+            return h('div', [
+              h('Input', {
+                on: {
+                  'on-change': (event) => {
+                    this.selectedWorkerList[params.index].trainingScore = event.target.value
+                  }
+                }
+              }),
+            ])
+          }
+        }
+      ],
+      getWorkerPageListId: '',
+      projectAddState: false,
+      project_loading: false,
+      projectState:false,
+      projectExist: false
+    }
+  },
+  computed: {
+    selectedWorkerList () {
+      let list = []
+      this.selectedList.forEach(item => {
+        list.push({
+          data: item.data.split(':')[1].split(' ')[0],
+          idCardNumber: item.data.split(':')[2],
+          trainingScore: '',
+          isPass: '',
+          wId: item.value
+        })
+      })
+      return list
     }
   },
   methods: {
@@ -316,42 +411,82 @@ export default({
         delete this.ruleInline.accessoryData
       }
     },
+    // 判断培训人员是否为空
+    trainJudge (obj) {
+      if (obj && obj.length !== 0) {
+        let state = false
+        obj.forEach(item => {
+          for (let key in item) {
+            console.log(!item[key])
+            console.log(item[key])
+            if (!item[key]) {
+              state = false
+              return
+            }
+          }
+          state = true
+        })
+        return state
+      } else {
+        return false
+      }
+    },
     // 培训资料上传
     accessorySubmit (name) {
       this.$refs.formInline.validate((valid) => {
+        this.sumSalarySingle_loading = true
         if (valid) {
           try {
-            let data = clonedeep(this.formInline)
-            if (data.accessoryName) {
-              data.attachments = []
-              data.attachments.push({
-                name: data.accessoryName,
-                data: data.accessoryData
+            if (this.trainJudge(this.selectedWorkerList)) {
+              let data = clonedeep(this.formInline)
+              if (data.accessoryName) {
+                data.attachments = []
+                data.attachments.push({
+                  name: data.accessoryName,
+                  data: data.accessoryData
+                })
+              } else {
+                data.attachments = []
+              }
+              data.projectCode = this.getWorkerPageListId
+              data.workers = this.selectedWorkerList
+              data.trainingDate = new Date(data.trainingDate).Format("yyyy-MM-dd")
+              trainAdd(data).then(res => {
+                this.sumSalarySingle_loading = false
+                this.modalTrain = false
+                this.$Message.success('成功')
+              }).catch(err => {
+                this.sumSalarySingle_loading = false
+                this.modalTrain = true
+                this.$Message.error(err)
               })
+            } else {
+              this.$Message.error('请完善培训工人信息')
+              this.modalTrain = true
+              this.sumSalarySingle_loading = false
             }
-            console.log(data)
-            trainAdd().then(res => {
-              console.log(res)
-            }).catch(err => {
-              console.log(err)
-            })
           } catch(e) {
-            console.log(e)
+            this.modalTrain = true
+            this.sumSalarySingle_loading = false
+            this.$Message.error('失败请联系管理员')
           }
         } else {
           this.$Message.error('请完善信息')
+          this.modalTrain = true
+          this.sumSalarySingle_loading = false
         }
       })
     },
     getWorkerPageList (projectCode) {
       this.workerList = []
+      this.getWorkerPageListId = projectCode
       workerGetPageList(projectCode).then(res => {
         this.workerList = []
         try {
           res.info.data.forEach(item => {
             this.workerList.push({
-              key: item.id,
-              label: `姓名:${item.workerName} 身份证号:${aesDecrypt(item.idCardNumber)}`
+              value: item.id,
+              data: `姓名:${item.workerName} 身份证号:${aesDecrypt(item.idCardNumber)}`,
             })
           })
         } catch (e) {
@@ -362,8 +497,53 @@ export default({
 
       })
     },
-    handleChange (newTargetKeys) {
-      this.targetKeys = newTargetKeys
+    // 选择培训是否合格
+    trainQualified (index, e) {
+      this.selectedWorkerList[index].isPass = e
+    },
+    // 查询项目是否存在
+    blurProject (e) {
+      console.log(e.target.value)
+      this.projectState = true
+      projectQuery(e.target.value).then(res => {
+         this.projectState = false
+         this.projectExist = true
+      }).catch(err => {
+        this.$Message.error(err)
+        this.projectState = false
+        this.projectExist = false
+      })
+    },
+    cancelProject () {
+      this.$refs.formInlineProject.resetFields()
+      this.projectAddState = false
+      this.project_loading = false
+      this.projectState = false
+      this.projectExist = false
+    },
+    cancelProjectInit () {
+      this.$refs.formInlineProject.resetFields()
+      this.projectState = false
+      this.projectExist = false
+      this.projectAddState = true
+    },
+    projectSubmit() {
+      this.project_loading = true
+      this.$refs.formInlineProject.validate((valid) => {
+        if (valid) {
+          projectAddMainboardNum(this.formInlineProject.mainboardNum, this.formInlineProject.projectCode).then(res => {
+            this.$Message.success('成功')
+            this.project_loading = false
+            this.projectAddState = false
+          }).catch(err => {
+            console.log(err)
+            this.project_loading = false
+          })
+        } else {
+          this.$Message.error('失败')
+          this.project_loading = false
+        }
+      })
     }
   },
   mounted () {
@@ -372,5 +552,8 @@ export default({
   }
 })
 </script>
-<style>
+<style scoped>
+  .demo-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
+  }
 </style>

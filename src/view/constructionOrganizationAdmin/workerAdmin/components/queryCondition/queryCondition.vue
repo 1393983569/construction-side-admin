@@ -6,14 +6,6 @@
       <slot></slot>
       <div :style="{height: `${heightValue}px`}" class="showClass">
         <div ref="allHeight" >
-          <div class="wrap-div" v-if="!showState.stateTIemDate">
-            <div class="main-left">
-              日期：
-            </div>
-            <div class="main-right">
-              <selectTIemDate @sendValue="getValueObj"></selectTIemDate>
-            </div>
-          </div>
 
           <div class="wrap-div" v-if="!showState.stateProjectName">
             <div class="main-left">
@@ -24,30 +16,21 @@
             </div>
           </div>
 
-          <div class="wrap-div" v-if="!showState.statePriceRange">
+          <div class="wrap-div" v-if="!showState.shopClassfiy">
             <div class="main-left">
-              价格区间：
+              身份证号：
             </div>
             <div class="main-right">
-              <selectPriceRange @sendValue="getValueObj"></selectPriceRange>
+              <shopClassfiy @sendValue="getValueObj"></shopClassfiy>
             </div>
           </div>
 
           <div class="wrap-div" v-if="!showState.stateProjectClassfiy">
             <div class="main-left">
-              项目分类：
+              学历：
             </div>
             <div class="main-right">
               <selectProjectClassfiy @sendValue="getValueObj"></selectProjectClassfiy>
-            </div>
-          </div>
-
-          <div class="wrap-div" v-if="!showState.shopClassfiy">
-            <div class="main-left">
-              产品分类：
-            </div>
-            <div class="main-right">
-              <shopClassfiy @sendValue="getValueObj"></shopClassfiy>
             </div>
           </div>
 

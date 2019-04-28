@@ -31,7 +31,7 @@
 <script>
 // 基本模板
 import editableTables from '_c/editableTables/editableTables'
-import { projectCorpGetList, getListOfPro, workerSalaryGetPageList, payoff, projectCorpTeamGetList, payOff, getPageListGetList } from '@/api/bankAdmin/bankAdmin'
+import { projectCorpGetList, getListOfPro, workerSalaryGetPageList, projectCorpTeamGetList, payOff, getPageListGetList } from '@/api/bankAdmin/bankAdmin'
 import clickImg from '_c/clickImg'
 import { aesDecrypt } from '@/libs/util'
 export default({
@@ -89,15 +89,6 @@ export default({
                     this.salary = ''
                     this.wId = params.row.id
                     this.modalGrantSingle = true
-                    // payoff(params.row.wsId).then(res => {
-                    //   this.dataList[params.index].state = '1'
-                    //   this.dataList[params.index].loading = false
-                    //   this.$Message.success(res.info)
-                    // }).catch(err => {
-                    //   this.dataList[params.index].state = '0'
-                    //   this.dataList[params.index].loading = false
-                    //   this.$Message.error(err)
-                    // })
                   }
                 }
               }, '确认发放')
@@ -142,11 +133,10 @@ export default({
           return
         }
         this.pageTotal = res.info.pageTotal
-        res.info.data.map((res) => {
-          this.dataList.push({...res, ...res.workerDomain, loading: false})
+        res.info.data.forEach((res) => {
+          this.dataList.push({...res, loading: false, workerName: res.workerDomain.workerName, cellPhone: res.workerDomain.cellPhone})
           let state = true
           this.dataList.forEach(item => {
-            console.log(item.state)
             if (item.state + '' !== '1') {
               state = false
               return

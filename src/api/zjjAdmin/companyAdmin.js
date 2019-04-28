@@ -1,13 +1,9 @@
 import axios from '@/libs/api.request'
 
 export const getPageDepts = (pageNum, selectValue) => {
-  let params = new URLSearchParams()
-  params.append('pageNum', pageNum)
-  if (selectValue.deptName) params.append('deptName', selectValue.deptName)
   return axios.request({
-    url: 'dept/getPageDepts',
-    data: params,
-    method: 'post'
+    url: `corp/getPageList?pageNum=${pageNum}${selectValue.deptName ? `&&deptName=${selectValue.deptName}` : ''}`,
+    method: 'get'
   })
 }
 

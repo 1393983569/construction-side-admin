@@ -295,7 +295,7 @@ export default({
     if (this.showTable) {
       this.getList()
       // 预先得到所有权限
-      this.getTlist()
+      // this.getTlist()
     }
   },
   watch: {
@@ -304,7 +304,7 @@ export default({
       if (e) {
         this.getList()
         // 预先得到所有权限
-        this.getTlist()
+        // this.getTlist()
       }
     }
   }

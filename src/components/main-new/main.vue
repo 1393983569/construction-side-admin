@@ -3,18 +3,20 @@
     <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
       <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        <div class="logo-con">
-          <img v-show="!collapsed" :src="maxLogo" style="height: 76px; width: 185px" key="max-logo" />
-          <img v-show="collapsed" :src="minLogo" key="min-logo" />
-        </div>
-        <!-- 显示店名 -->
-        <div class="shopName" v-show="!collapsed">
-          {{ shopName }}
+        <div class="header-color">
+          <div class="logo-con">
+            <img v-show="!collapsed" :src="maxLogo" style="height: 76px; width: 172px" key="max-logo" />
+            <img v-show="collapsed" :src="minLogo" key="min-logo" />
+          </div>
+          <!-- 显示店名 -->
+          <div class="shopName" v-show="!collapsed">
+            {{ shopName }}
+          </div>
         </div>
       </side-menu>
     </Sider>
     <Layout>
-      <Header class="header-con" style="background-color: #4c789e">
+      <Header class="header-con" style="background-color: #FFFFFF">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
           <!--<user :message-unread-count="unreadCount" :user-avator="userAvator"/>-->
           <user :user-avator="userAvator"/>
@@ -180,7 +182,7 @@ export default {
 </script>
 <style>
   .shopName{
-    color: #36adf9;
+    color: #212121;
     font-size: 20px;
     padding: 10px 12px;
     text-align: center;

@@ -68,130 +68,130 @@ export default [
       }
     ]
   },
-  // {
-  //   path: '/userManagement',
-  //   name: 'userManagement',
-  //   meta: {
-  //     access: ['yonghu_g'],
-  //     icon: '_gongren',
-  //     title: '用户管理'
-  //   },
-  //   component: Main,
-  //   children: [
-  //     {
-  //       path: 'message',
-  //       name: 'message',
-  //       meta: {
-  //         access: ['renyuanxinxi_g'],
-  //         icon: '_gongren',
-  //         title: '人员信息'
-  //       },
-  //       component: () => import('@/view/userManagement/message.vue')
-  //     },
-  //     {
-  //       path: 'adminJurisdiction',
-  //       name: 'adminJurisdiction',
-  //       meta: {
-  //         access: ['quanxianfenpei_g'],
-  //         icon: '_gongren',
-  //         title: '权限分配'
-  //       },
-  //       component: () => import('@/view/userManagement/jurisdiction/adminJurisdiction.vue')
-  //     },
-  //     {
-  //       path: 'addProfession',
-  //       name: 'addProfession',
-  //       meta: {
-  //         // access: ['工种管理'],
-  //         icon: '_leibieguanli',
-  //         title: '工种管理'
-  //       },
-  //       component: () => import('@/view/userManagement/addProfession.vue')
-  //     },
-  //     {
-  //       path: 'experience',
-  //       name: 'experience',
-  //       meta: {
-  //         access: ['经验类型'],
-  //         icon: '_leibieguanli',
-  //         title: '经验类型'
-  //       },
-  //       component: () => import('@/view/userManagement/experience.vue')
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/zjjAdmin',
-  //   name: 'zjjAdmin',
-  //   meta: {
-  //     access: ['住建局'],
-  //     icon: '_jianzhu',
-  //     title: '住建局管理'
-  //   },
-  //   component: Main,
-  //   children: [
-  //     {
-  //       path: 'constructionOrganization',
-  //       name: 'constructionOrganization',
-  //       meta: {
-  //         access: ['施工单位管理住建局'],
-  //         icon: '_shigongdanwei',
-  //         title: '施工单位管理'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/companyAdmin.vue')
-  //     },
-  //     {
-  //       path: 'supervision',
-  //       name: 'supervision',
-  //       meta: {
-  //         access: ['监督预警'],
-  //         icon: '_jiandukaohe',
-  //         title: '监督预警'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/supervision.vue')
-  //     },
-  //     {
-  //       path: 'construction',
-  //       name: 'construction',
-  //       meta: {
-  //         access: ['建设项目管理'],
-  //         icon: '_jiandukaohe',
-  //         title: '建设项目管理'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/construction.vue')
-  //     },
-  //     {
-  //       path: 'userAdmin',
-  //       name: 'userAdmin',
-  //       meta: {
-  //         access: ['住建局用户管理'],
-  //         icon: '_leibieguanli',
-  //         title: '用户管理'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/userAdmin.vue')
-  //     },
-  //     {
-  //       path: 'salaryFrom',
-  //       name: 'salaryFrom',
-  //       meta: {
-  //         access: ['工资表'],
-  //         icon: '_leibieguanli',
-  //         title: '工资表'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/salaryFrom.vue')
-  //     },
-  //     {
-  //       path: 'salaryDetails',
-  //       name: 'salaryDetails',
-  //       meta: {
-  //         // access: ['工资详情'],
-  //         icon: '_leibieguanli',
-  //         title: '工资详情'
-  //       },
-  //       component: () => import('@/view/zjjAdmin/salaryDetails.vue')
-  //     }
-  //   ]
-  // },
+  {
+    path: '/userManagement',
+    name: 'userManagement',
+    meta: {
+      // access: ['yonghu_g'],
+      icon: '_gongren',
+      title: '用户管理'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'message',
+        name: 'message',
+        meta: {
+          // access: ['renyuanxinxi_g'],
+          icon: '_gongren',
+          title: '人员信息'
+        },
+        component: () => import('@/view/userManagement/message.vue')
+      },
+      {
+        path: 'adminJurisdiction',
+        name: 'adminJurisdiction',
+        meta: {
+          // access: ['quanxianfenpei_g'],
+          icon: '_gongren',
+          title: '权限分配'
+        },
+        component: () => import('@/view/userManagement/jurisdiction/adminJurisdiction.vue')
+      },
+      // {
+      //   path: 'addProfession',
+      //   name: 'addProfession',
+      //   meta: {
+      //     // access: ['工种管理'],
+      //     icon: '_leibieguanli',
+      //     title: '工种管理'
+      //   },
+      //   component: () => import('@/view/userManagement/addProfession.vue')
+      // },
+      // {
+      //   path: 'experience',
+      //   name: 'experience',
+      //   meta: {
+      //     // access: ['经验类型'],
+      //     icon: '_leibieguanli',
+      //     title: '经验类型'
+      //   },
+      //   component: () => import('@/view/userManagement/experience.vue')
+      // }
+    ]
+  },
+  {
+    path: '/zjjAdmin',
+    name: 'zjjAdmin',
+    meta: {
+      // access: ['住建局'],
+      icon: '_jianzhu',
+      title: '住建局管理'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'constructionOrganization',
+        name: 'constructionOrganization',
+        meta: {
+          // access: ['施工单位管理住建局'],
+          icon: '_shigongdanwei',
+          title: '施工单位管理'
+        },
+        component: () => import('@/view/zjjAdmin/companyAdmin.vue')
+      },
+      {
+        path: 'supervision',
+        name: 'supervision',
+        meta: {
+          // access: ['监督预警'],
+          icon: '_jiandukaohe',
+          title: '监督预警'
+        },
+        component: () => import('@/view/zjjAdmin/supervision.vue')
+      },
+      {
+        path: 'construction',
+        name: 'construction',
+        meta: {
+          // access: ['建设项目管理'],
+          icon: '_jiandukaohe',
+          title: '建设项目管理'
+        },
+        component: () => import('@/view/zjjAdmin/construction.vue')
+      },
+      {
+        path: 'userAdmin',
+        name: 'userAdmin',
+        meta: {
+          // access: ['住建局用户管理'],
+          icon: '_leibieguanli',
+          title: '用户管理'
+        },
+        component: () => import('@/view/zjjAdmin/userAdmin.vue')
+      },
+      {
+        path: 'salaryFrom',
+        name: 'salaryFrom',
+        meta: {
+          // access: ['工资表'],
+          icon: '_leibieguanli',
+          title: '工资表'
+        },
+        component: () => import('@/view/zjjAdmin/salaryFrom.vue')
+      },
+      {
+        path: 'salaryDetails',
+        name: 'salaryDetails',
+        meta: {
+          // access: ['工资详情'],
+          icon: '_leibieguanli',
+          title: '工资详情'
+        },
+        component: () => import('@/view/zjjAdmin/salaryDetails.vue')
+      }
+    ]
+  },
   {
     path: '/constructionOrganizationAdmin',
     name: 'constructionOrganizationAdmin',
@@ -264,16 +264,16 @@ export default [
         },
         component: () => import('@/view/bankAdmin/bankAdmin.vue')
       },
-      {
-        path: 'bankUser',
-        name: 'bankUser',
-        meta: {
-          // access: ['银行用户管理'],
-          icon: '_yinhang',
-          title: '支行管理'
-        },
-        component: () => import('@/view/bankAdmin/userAdmin.vue')
-      },
+      // {
+      //   path: 'bankUser',
+      //   name: 'bankUser',
+      //   meta: {
+      //     // access: ['银行用户管理'],
+      //     icon: '_yinhang',
+      //     title: '支行管理'
+      //   },
+      //   component: () => import('@/view/bankAdmin/userAdmin.vue')
+      // },
       {
         path: 'cashDeposit',
         name: 'cashDeposit',
@@ -284,16 +284,16 @@ export default [
         },
         component: () => import('@/view/bankAdmin/guaranteeDeposit.vue')
       },
-      {
-        path: 'salaryFromBa',
-        name: 'salaryFromBa',
-        meta: {
-          // access: ['总工资表'],
-          icon: '_yinhang',
-          title: '总工资表'
-        },
-        component: () => import('@/view/bankAdmin/salaryFrom.vue')
-      }
+      // {
+      //   path: 'salaryFromBa',
+      //   name: 'salaryFromBa',
+      //   meta: {
+      //     // access: ['总工资表'],
+      //     icon: '_yinhang',
+      //     title: '总工资表'
+      //   },
+      //   component: () => import('@/view/bankAdmin/salaryFrom.vue')
+      // }
     ]
   },
   {
