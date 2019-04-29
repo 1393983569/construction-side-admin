@@ -31,11 +31,15 @@ export const getPageListOfWorker = (pageNum, selectValue) => {
  * @param {*} pageNum
  * @param {*} selectValue
  */
-export const workerQuery = (pageNum, selectValue) => {
+export const workerQuery = (pageNum, selectList) => {
   let params = new URLSearchParams()
   params.append('pageNum', pageNum)
-  for (let key in selectValue) {
-    if (selectValue[key]) params.append(key, selectValue[key])
+  if (selectList.length !== 0 && selectList.length) {
+    selectList.forEach(item => {
+      for (let key in item) {
+        if (item[key]) params.append(key, item[key])
+      }
+    })
   }
   return axios.request({
     url: 'worker/getPageList',

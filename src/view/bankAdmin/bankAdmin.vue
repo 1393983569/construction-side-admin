@@ -118,14 +118,15 @@ export default({
       sumSalarySingle: '',
       sumSalarySingle_loading: false,
       wId: '',
-      salary: ''
+      salary: '',
+      nameData: ''
     }
   },
   methods: {
     // 分页查询
     getList () {
       this.dataList = []
-      workerSalaryGetPageList(this.pageNum, this.timePbId).then(res => {
+      workerSalaryGetPageList(this.pageNum, this.timePbId, this.nameData).then(res => {
         this.dataList = []
         if (res.info === '暂无数据') {
           this.$Message.error(res.info)
@@ -258,9 +259,9 @@ export default({
       this.getList()
     },
     clickSearch (e) {
-      this.selectValue.workerName = e
-      this.getList()
+      this.nameData = e
       this.restoration()
+      this.getList()
     },
     // confirmGrant () {
     //   this.modal_loading = true

@@ -24,16 +24,16 @@
       }
     },
     mounted () {
-      getPageCusFrom().then(res => {
-        res.info.data.map(item => {
-          this.selectChannelList.push({
-            name: item.name,
-            id: item.id
-          })
-        })
-      }).catch(err => {
+      // getPageCusFrom().then(res => {
+      //   res.info.data.map(item => {
+      //     this.selectChannelList.push({
+      //       name: item.name,
+      //       id: item.id
+      //     })
+      //   })
+      // }).catch(err => {
 
-      })
+      // })
     }
   })
 </script>

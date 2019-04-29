@@ -222,6 +222,9 @@ export default {
         ],
         bankNumber: [
           { required: true, message: '银行卡号不能为空', trigger: 'blur' }
+        ],
+        bankName: [
+          { required: true, message: '银行支行名称不能为空', trigger: 'blur' }
         ]
       }
     }

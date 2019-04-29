@@ -161,6 +161,16 @@ export default [
         component: () => import('@/view/zjjAdmin/construction.vue')
       },
       {
+        path: 'zjjAdminWorkerAdmin',
+        name: 'zjjAdminWorkerAdmin',
+        meta: {
+          // access: ['提交工资单'],
+          icon: '_gongzibiaoshenhe',
+          title: '查看工人'
+        },
+        component: () => import('@/view/zjjAdmin/workerAdmin.vue')
+      },
+      {
         path: 'userAdmin',
         name: 'userAdmin',
         meta: {
@@ -170,26 +180,26 @@ export default [
         },
         component: () => import('@/view/zjjAdmin/userAdmin.vue')
       },
-      {
-        path: 'salaryFrom',
-        name: 'salaryFrom',
-        meta: {
-          // access: ['工资表'],
-          icon: '_leibieguanli',
-          title: '工资表'
-        },
-        component: () => import('@/view/zjjAdmin/salaryFrom.vue')
-      },
-      {
-        path: 'salaryDetails',
-        name: 'salaryDetails',
-        meta: {
-          // access: ['工资详情'],
-          icon: '_leibieguanli',
-          title: '工资详情'
-        },
-        component: () => import('@/view/zjjAdmin/salaryDetails.vue')
-      }
+      // {
+      //   path: 'salaryFrom',
+      //   name: 'salaryFrom',
+      //   meta: {
+      //     // access: ['工资表'],
+      //     icon: '_leibieguanli',
+      //     title: '工资表'
+      //   },
+      //   component: () => import('@/view/zjjAdmin/salaryFrom.vue')
+      // },
+      // {
+      //   path: 'salaryDetails',
+      //   name: 'salaryDetails',
+      //   meta: {
+      //     // access: ['工资详情'],
+      //     icon: '_leibieguanli',
+      //     title: '工资详情'
+      //   },
+      //   component: () => import('@/view/zjjAdmin/salaryDetails.vue')
+      // }
     ]
   },
   {
@@ -231,7 +241,7 @@ export default [
           title: '提交工资单'
         },
         component: () => import('@/view/constructionOrganizationAdmin/paySheet/paySheet.vue')
-      },
+      }
       // {
       //   path: 'wageQuery',
       //   name: 'wageQuery',
@@ -278,7 +288,7 @@ export default [
         path: 'cashDeposit',
         name: 'cashDeposit',
         meta: {
-          // access: ['押金审核'],
+          // access: ['资金审核'],
           icon: '_yinhang',
           title: '资金审核'
         },

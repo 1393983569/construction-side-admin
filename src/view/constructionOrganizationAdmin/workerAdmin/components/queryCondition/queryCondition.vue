@@ -16,14 +16,14 @@
             </div>
           </div>
 
-          <div class="wrap-div" v-if="!showState.stateSingleChoice">
-            <div class="main-left">
-              企业：
-            </div>
-            <div class="main-right">
-              <selectSingleChoice @sendValue="getValueObj"></selectSingleChoice>
-            </div>
-          </div>
+          <!--<div class="wrap-div" v-if="!showState.stateSingleChoice">-->
+            <!--<div class="main-left">-->
+              <!--企业：-->
+            <!--</div>-->
+            <!--<div class="main-right">-->
+              <!--<selectSingleChoice @sendValue="getValueObj"></selectSingleChoice>-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="wrap-div" v-if="!showState.shopClassfiy">
             <div class="main-left">

@@ -1,7 +1,7 @@
 <template>
-  <!-- 项目名称 -->
+  <!-- 姓名 -->
   <div>
-    <Input search placeholder="请输入项目名称" @on-search="selectProName"/>
+    <Input search placeholder="姓名" @on-search="selectProName" style="width: 250px"/>
   </div>
 </template>
 <script>
@@ -14,7 +14,7 @@
     methods: {
       selectProName(e) {
         this.$emit('sendValue', {
-          title: e
+          workerName: e
         })
       }
     },

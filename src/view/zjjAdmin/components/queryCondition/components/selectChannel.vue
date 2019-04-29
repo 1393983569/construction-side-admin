@@ -1,32 +1,34 @@
 <template>
-  <!-- 渠道 -->
+  <!-- 文化程度 -->
   <div>
-    <CheckboxGroup v-model="selectChannels" @on-change="selectChannelValue">
-      <Checkbox v-for="(item, index) in selectChannelList" :label="item.id">{{ item.name }}</Checkbox>
-    </CheckboxGroup>
+    <Select v-model="catIdsValue" clearable @on-change="selectBox" style="width: 250px">
+      <Option v-for="item in classfiyList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+    </Select>
   </div>
 </template>
 <script>
-  import {getPageCusFrom} from '@/api/queryCondition/selectChannel'
+  import {cultureLevelType} from '@/api/public'
   export default ({
     data() {
       return {
-        selectChannels: [],
-        selectChannelList: [],
-        selectChannel: {}
+        classfiyList: [],
+        catIdsValue: []
       }
     },
     methods: {
-      selectChannelValue(e) {
+      selectBox(e) {
         this.$emit('sendValue', {
-          cusFroms: e
+          cultureLevelType: e
         })
       }
     },
     mounted () {
-      getPageCusFrom().then(res => {
-        res.info.data.map(item => {
-          this.selectChannelList.push({
+      this.classfiyList = []
+      cultureLevelType().then(res => {
+        this.classfiyList = []
+        console.log(res)
+        res.info.map(item => {
+          this.classfiyList.push({
             name: item.name,
             id: item.id
           })

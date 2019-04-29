@@ -9,3 +9,10 @@ export const getPageListByDept = (pageNum, selectValue) => {
     method: 'post'
   })
 }
+
+export const projectGetPageList = (pageNum) => {
+  return axios.request({
+    url: 'project/getPageList',
+    method: 'get'
+  })
+}

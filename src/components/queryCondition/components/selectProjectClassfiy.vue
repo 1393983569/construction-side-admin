@@ -24,17 +24,17 @@
     },
     mounted () {
       this.classfiyList = []
-      getPageTsProjectCategory().then(res => {
-        this.classfiyList = []
-        res.info.data.map(item => {
-          this.classfiyList.push({
-            name: item.name,
-            id: item.id
-          })
-        })
-      }).catch(err => {
+      // getPageTsProjectCategory().then(res => {
+      //   this.classfiyList = []
+      //   res.info.data.map(item => {
+      //     this.classfiyList.push({
+      //       name: item.name,
+      //       id: item.id
+      //     })
+      //   })
+      // }).catch(err => {
 
-      })
+      // })
     }
   })
 </script>

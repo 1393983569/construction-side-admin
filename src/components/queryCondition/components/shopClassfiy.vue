@@ -24,17 +24,17 @@
     },
     mounted () {
       this.classfiyList = []
-      getPageGoodsCategory().then(res => {
-        this.classfiyList = []
-        res.info.data.map(item => {
-          this.classfiyList.push({
-            name: item.name,
-            id: item.id
-          })
-        })
-      }).catch(err => {
+      // getPageGoodsCategory().then(res => {
+      //   this.classfiyList = []
+      //   res.info.data.map(item => {
+      //     this.classfiyList.push({
+      //       name: item.name,
+      //       id: item.id
+      //     })
+      //   })
+      // }).catch(err => {
 
-      })
+      // })
     }
   })
 </script>

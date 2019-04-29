@@ -99,6 +99,13 @@
         <Button type="primary" :loading="sumSalarySingle_loading" @click="accessorySubmit">确定</Button>
       </div>
     </Modal>
+    <Modal
+      v-model="trainSeeState"
+      :mask-closable='false'
+      title="查看合同"
+      width="900">
+        <trainSee ref="trainSeeRef" />
+    </Modal>
   </div>
 </template>
 <script>
@@ -114,6 +121,7 @@ import config from '@/config'
 import clonedeep from 'clonedeep'
 import {aesDecrypt} from '@/libs/util'
 import listSelecTimplement from '_c/listSelecTimplement'
+import trainSee from './components/trainSee'
 export default({
   components: {
     editableTables,
@@ -122,7 +130,8 @@ export default({
     projectAdminSelect,
     contractorAdmin,
     projectAdminList,
-    listSelecTimplement
+    listSelecTimplement,
+    trainSee
   },
   data () {
     return {
@@ -201,7 +210,23 @@ export default({
                     this.getWorkerPageList(params.row.projectCode)
                   }
                 }
-              }, '添加培训资料')
+              }, '添加培训资料'),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginTop: '5px',
+                  marginBottom: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.trainSeeState = true
+                    this.$refs.trainSeeRef.getList(params.row.projectCode)
+                  }
+                }
+              }, '查看培训资料')
             ])
           }
         }
@@ -313,7 +338,8 @@ export default({
       projectAddState: false,
       project_loading: false,
       projectState:false,
-      projectExist: false
+      projectExist: false,
+      trainSeeState: false
     }
   },
   computed: {

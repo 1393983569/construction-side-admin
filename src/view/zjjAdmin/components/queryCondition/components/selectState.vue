@@ -1,10 +1,9 @@
 <template>
   <!--状态 -->
   <div>
-    <RadioGroup v-model="status" @on-change="selectStateValue">
-      <Radio label="2">下线</Radio>
-      <Radio label="1">上线</Radio>
-      <Radio label="0">全部</Radio>
+    <RadioGroup v-model="gender" @on-change="selectStateValue">
+      <Radio label="男">男</Radio>
+      <Radio label="女">女</Radio>
     </RadioGroup>
     <Icon type="ios-close" class="icon-delete" @click="selectStateValue('')" />
   </div>
@@ -13,14 +12,14 @@
   export default ({
     data() {
       return {
-        status: ''
+        gender: ''
       }
     },
     methods: {
       selectStateValue(e) {
-        this.status = e
+        this.gender = e
         this.$emit('sendValue', {
-          status: e
+          gender: e
         })
       }
     },

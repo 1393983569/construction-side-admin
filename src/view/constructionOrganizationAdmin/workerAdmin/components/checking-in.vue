@@ -55,6 +55,7 @@ export default({
     // 分页查询管理员
     getList (e) {
       this.dataList = []
+      if (!e) return
       attendance(this.pageNum, e).then(res => {
         console.log(res)
         try {

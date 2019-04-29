@@ -51,10 +51,11 @@ export const getPageListGetList = (projectCropTeamId) => {
 }
 
 // （银行）查询时间下的工人
-export const workerSalaryGetPageList = (pageNum, pbId) => {
+export const workerSalaryGetPageList = (pageNum, pbId, workerName) => {
   let params = new URLSearchParams()
   params.append('pageNum', pageNum)
   if (pbId) params.append('pbId', pbId)
+  if (workerName) params.append('workerName', workerName)
   return axios.request({
     url: 'workerSalary/getPageList',
     data: params,

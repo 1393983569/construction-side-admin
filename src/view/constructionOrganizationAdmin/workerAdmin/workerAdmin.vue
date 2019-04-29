@@ -1,11 +1,8 @@
 <template>
   <div>
     <div>
-      <queryCondition />
-      <editableTables  :columns='columns' :showHeader="false" :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'>
-        <span>姓名：</span>
-        <Input search placeholder="请填写姓名" style="width: 150px;" @on-search="clickSearch" />
-      </editableTables>
+      <queryCondition @sendDataList="sendDataList" />
+      <editableTables  :columns='columns' :showHeader="false" :pageTotal='pageTotal' :selectShow="false" v-model="dataList" @getPage='getPageNum'></editableTables>
     </div>
     <Modal
       v-model="addModal"
@@ -44,6 +41,13 @@
       width="900">
       <checking-in ref="checkingInRef" :wId="wId"></checking-in>
     </Modal>
+    <Modal
+      v-model="contractSeeState"
+      :mask-closable='false'
+      title="查看合同"
+      width="900">
+      <contractSee ref="contractSeeRef" :wId="wId"></contractSee>
+    </Modal>
   </div>
 </template>
 <script>
@@ -64,6 +68,8 @@ import uploadSalary from './components/uploadSalary'
 import checkingIn from './components/checking-in'
 // 查询组件
 import queryCondition from './components/queryCondition'
+// 查看合同
+import contractSee from './components/contractSee'
 export default({
   components: {
     editableTables,
@@ -72,7 +78,8 @@ export default({
     addWorker,
     uploadSalary,
     checkingIn,
-    queryCondition
+    queryCondition,
+    contractSee
   },
   data () {
     return {
@@ -101,7 +108,7 @@ export default({
                     <icon type="ios-create" style="font-size: 16px; color: #2D8cF0;" on-click={this.modificationWorker.bind(this, params.row)}/>
                   </tooltip>
                   <tooltip content="查看合同">
-                    <icon type="ios-eye" style="font-size: 20px; color: #2D8cF0;"/>
+                    <icon on-click={this.contrac.bind(this, params.row.id)} type="ios-eye" style="font-size: 20px; color: #2D8cF0;"/>
                   </tooltip>
                 </div>
                  <div>
@@ -221,26 +228,7 @@ export default({
                     this.$refs.checkingInRef.getList(params.row.id)
                   }
                 }
-              }, '查看考勤'),
-                 h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px',
-                  marginTop: '5px',
-                  // display: 'block'
-                },
-                on: {
-                  click: () => {
-                    this.uploadSalaryState = true
-                    this.wId = params.row.id + ''
-                    // 清除add状态
-                    this.$refs.uploadSalaryRef.handleReset()
-                  }
-                }
-              }, '培训管理')
+              }, '查看考勤')
             ])
           }
         }
@@ -264,6 +252,7 @@ export default({
       uploadSalaryState: false,
       loading_uploadSalaryS: false,
       checkingInState: false,
+      contractSeeState: false
     }
   },
   methods: {
@@ -365,6 +354,16 @@ export default({
         this.loading_uploadSalaryS = false
         this.uploadSalaryState = true
       }
+    },
+    sendDataList (e) {
+      this.restoration()
+      this.selectValue = e
+      this.getList()
+    },
+    contrac (id, e) {
+      console.log(e, id)
+      this.contractSeeState = true
+      this.$refs.contractSeeRef.getList(id)
     }
   },
   mounted () {
