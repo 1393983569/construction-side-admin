@@ -72,7 +72,7 @@ export default [
     path: '/userManagement',
     name: 'userManagement',
     meta: {
-      // access: ['yonghu_g'],
+      access: ['yonghu_g'],
       icon: '_gongren',
       title: '用户管理'
     },
@@ -82,7 +82,7 @@ export default [
         path: 'message',
         name: 'message',
         meta: {
-          // access: ['renyuanxinxi_g'],
+          access: ['renyuanxinxi_g'],
           icon: '_gongren',
           title: '人员信息'
         },
@@ -92,7 +92,7 @@ export default [
         path: 'adminJurisdiction',
         name: 'adminJurisdiction',
         meta: {
-          // access: ['quanxianfenpei_g'],
+          access: ['quanxianfenpei_g'],
           icon: '_gongren',
           title: '权限分配'
         },
@@ -124,7 +124,7 @@ export default [
     path: '/zjjAdmin',
     name: 'zjjAdmin',
     meta: {
-      // access: ['住建局'],
+      access: ['住建局'],
       icon: '_jianzhu',
       title: '住建局管理'
     },
@@ -134,7 +134,7 @@ export default [
         path: 'constructionOrganization',
         name: 'constructionOrganization',
         meta: {
-          // access: ['施工单位管理住建局'],
+          access: ['施工单位管理住建局'],
           icon: '_shigongdanwei',
           title: '施工单位管理'
         },
@@ -144,7 +144,7 @@ export default [
         path: 'supervision',
         name: 'supervision',
         meta: {
-          // access: ['监督预警'],
+          access: ['监督预警'],
           icon: '_jiandukaohe',
           title: '监督预警'
         },
@@ -154,7 +154,7 @@ export default [
         path: 'construction',
         name: 'construction',
         meta: {
-          // access: ['建设项目管理'],
+          access: ['建设项目管理'],
           icon: '_jiandukaohe',
           title: '建设项目管理'
         },
@@ -164,7 +164,7 @@ export default [
         path: 'zjjAdminWorkerAdmin',
         name: 'zjjAdminWorkerAdmin',
         meta: {
-          // access: ['提交工资单'],
+          access: ['提交工资单'],
           icon: '_gongzibiaoshenhe',
           title: '查看工人'
         },
@@ -174,7 +174,7 @@ export default [
         path: 'userAdmin',
         name: 'userAdmin',
         meta: {
-          // access: ['住建局用户管理'],
+          access: ['住建局用户管理'],
           icon: '_leibieguanli',
           title: '用户管理'
         },
@@ -206,7 +206,7 @@ export default [
     path: '/constructionOrganizationAdmin',
     name: 'constructionOrganizationAdmin',
     meta: {
-      // access: ['施工单位管理'],
+      access: ['施工单位管理'],
       icon: '_shigongdanwei',
       title: '施工单位管理'
     },
@@ -216,7 +216,7 @@ export default [
         path: 'projectAdmin',
         name: 'projectAdmin',
         meta: {
-          // access: ['施工项目管理'],
+          access: ['施工项目管理'],
           icon: '_xiangmu',
           title: '施工项目管理'
         },
@@ -226,7 +226,7 @@ export default [
         path: 'workerAdmin',
         name: 'workerAdmin',
         meta: {
-          // access: ['工人管理'],
+          access: ['工人管理'],
           icon: '_gongren',
           title: '工人管理'
         },
@@ -236,7 +236,7 @@ export default [
         path: 'paySheet',
         name: 'paySheet',
         meta: {
-          // access: ['提交工资单'],
+          access: ['提交工资单'],
           icon: '_gongzibiaoshenhe',
           title: '提交工资单'
         },
@@ -258,7 +258,7 @@ export default [
     path: '/bankAdminFather',
     name: 'bankAdminFather',
     meta: {
-      // access: ['银行管理'],
+      access: ['银行管理'],
       icon: '_yinhang',
       title: '银行管理'
     },
@@ -268,7 +268,7 @@ export default [
         path: 'bankAdmin',
         name: 'bankAdmin',
         meta: {
-          // access: ['银行管理Node'],
+          access: ['银行管理Node'],
           icon: '_yinhang',
           title: '工资管理'
         },
@@ -288,7 +288,7 @@ export default [
         path: 'cashDeposit',
         name: 'cashDeposit',
         meta: {
-          // access: ['资金审核'],
+          access: ['资金审核'],
           icon: '_yinhang',
           title: '资金审核'
         },

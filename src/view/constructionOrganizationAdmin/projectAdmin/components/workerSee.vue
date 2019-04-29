@@ -57,7 +57,7 @@ export default({
     // 分页查询管理员
     getList (id) {
       this.dataList = []
-      console.log(id)
+      if (!id) return
       trainQuery(id).then(res => {
         this.dataList = []
         if (res.info === '暂无数据') {

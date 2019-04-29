@@ -102,9 +102,14 @@ export const politicsType = () => {
   })
 }
 
-export const getBankList = (accountType) => {
+/**
+ * 获取银行列表
+ */
+export const getBankList = () => {
   return axios.request({
-    url: `getAdminsList?accountType=${accountType}`,
+    url: `getAdminsList?accountType=3`,
     method: 'get'
   })
 }
+
+

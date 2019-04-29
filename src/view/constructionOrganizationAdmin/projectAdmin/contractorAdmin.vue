@@ -64,9 +64,14 @@
         <FormItem prop="pmPhone" label="项目经理电话" style="width: 200px">
           <Input v-model="formInline.pmPhone" style="margin-bottom: 5px" placeholder="项目经理电话" />
         </FormItem>
-        <FormItem prop="bankName" label="银行支行名称" style="width: 200px">
-          <Input v-model="formInline.bankName" style="margin-bottom: 5px" placeholder="银行支行名称" />
+        <FormItem prop="bankName" label="银行支行名称">
+          <Select v-model="formInline.bankName" style="width:200px">
+            <Option v-for="item in bankList" :value="item.id + ''" :key="item.id">{{ item.accountTitle }}</Option>
+          </Select>
         </FormItem>
+        <!-- <FormItem prop="bankName" label="银行支行名称" style="width: 200px">
+          <Input v-model="formInline.bankName" style="margin-bottom: 5px" placeholder="银行支行名称" />
+        </FormItem> -->
         <FormItem prop="bankNumber" label="银行卡号" style="width: 200px">
           <Input v-model="formInline.bankNumber" style="margin-bottom: 5px" placeholder="银行卡号" />
         </FormItem>
@@ -87,7 +92,7 @@ import {getPageList, addUnity} from '@/api/constructionOrganizationAdmin/contrac
 import addProjectWorker from './addProjectWorker'
 import contractorAdminList from './components/contractorAdminList'
 import {aesDecrypt} from '@/libs/util'
-import { subcontractorType, unityType } from '@/api/public'
+import { subcontractorType, unityType, getBankList } from '@/api/public'
 import teamOrGroup from './components/teamOrGroup'
 export default {
   name: 'contractorAdmin',
@@ -195,6 +200,7 @@ export default {
       didList: '',
       subcontractorTypeList: [],
       listCodeId: '',
+      bankList: [],
       formInline: {
         corpCode: '',
         corpName: '',
@@ -216,6 +222,9 @@ export default {
         ],
         corpName: [
           { required: true, message: '企业名称不能为空', trigger: 'blur' }
+        ],
+        bankName: [
+          { required: true, message: '银行支行名称不能为空', trigger: 'change' }
         ],
         corpType: [
           { required: true, message: '参建类型不能为空', trigger: 'change' }
@@ -263,8 +272,8 @@ export default {
       this.add_loading = true
       this.$refs['formInline'].validate((valid) => {
         if (valid) {
-          this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd")
-          this.formInline.exitTime = new Date(this.formInline.exitTime).Format("yyyy-MM-dd")
+          this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd hh:mm:ss")
+          this.formInline.exitTime = new Date(this.formInline.exitTime).Format("yyyy-MM-dd hh:mm:ss")
           this.formInline.projectCode = this.projectCode + ''
           addUnity(this.formInline).then(res => {
             this.add_loading = false
@@ -304,6 +313,15 @@ export default {
       unityType().then(res => {
         this.subcontractorTypeList = []
         this.subcontractorTypeList.push(...res.info)
+      }).catch(err => {
+
+      })
+    },
+      getSubcontractorType () {
+      this.bankList = []
+      getBankList().then(res => {
+        this.bankList = []
+        this.bankList.push(...res.info)
       }).catch(err => {
 
       })

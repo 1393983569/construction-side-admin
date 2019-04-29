@@ -161,7 +161,7 @@
       // 获得数据字典
       async getDictionaries () {
         try {
-          this.bankList = await getBankList(3).then().catch()
+          this.bankList = await getBankList().then().catch()
         } catch (e) {
           console.log(e)
         }
