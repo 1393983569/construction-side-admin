@@ -1,13 +1,13 @@
 <template>
-  <!-- 项目分类 -->
+  <!-- 工种 -->
   <div>
-    <CheckboxGroup v-model="catIdsValue" @on-change="selectBox">
-      <Checkbox v-for="(item, index) in classfiyList" :label="item.id">{{ item.name }}</Checkbox>
-    </CheckboxGroup>
+    <Select v-model="catIdsValue" clearable @on-change="selectBox" style="width: 250px">
+      <Option v-for="item in classfiyList" :value="item.workType" :key="item.workType">{{ item.workTypeName }}</Option>
+    </Select>
   </div>
 </template>
 <script>
-  import {getPageGoodsCategory} from '@/api/queryCondition/shopClassfiy'
+  import {workerType} from '@/api/public'
   export default ({
     data() {
       return {
@@ -18,18 +18,18 @@
     methods: {
       selectBox(e) {
         this.$emit('sendValue', {
-          catIds: e
+          workType: e
         })
       }
     },
     mounted () {
       this.classfiyList = []
-      getPageGoodsCategory().then(res => {
+      workerType().then(res => {
         this.classfiyList = []
-        res.info.data.map(item => {
+        res.info.map(item => {
           this.classfiyList.push({
-            name: item.name,
-            id: item.id
+            workTypeName: item.profession,
+            workType: item.tid
           })
         })
       }).catch(err => {

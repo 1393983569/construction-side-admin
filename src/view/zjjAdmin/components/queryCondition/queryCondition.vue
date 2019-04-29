@@ -16,36 +16,27 @@
             </div>
           </div>
 
-          <div class="wrap-div" v-if="!showState.stateSingleChoice">
-            <div class="main-left">
-              企业：
-            </div>
-            <div class="main-right">
-              <selectSingleChoice @sendValue="getValueObj"></selectSingleChoice>
-            </div>
-          </div>
-
           <div class="wrap-div" v-if="!showState.shopClassfiy">
             <div class="main-left">
-              工种：
+              身份证号：
             </div>
             <div class="main-right">
               <shopClassfiy @sendValue="getValueObj"></shopClassfiy>
             </div>
           </div>
 
-          <!--<div class="wrap-div" v-if="!showState.stateProjectClassfiy">-->
-            <!--<div class="main-left">-->
-              <!--工种：-->
-            <!--</div>-->
-            <!--<div class="main-right">-->
-              <!--<selectProjectClassfiy @sendValue="getValueObj"></selectProjectClassfiy>-->
-            <!--</div>-->
-          <!--</div>-->
+          <div class="wrap-div" v-if="!showState.stateProjectClassfiy">
+            <div class="main-left">
+              学历：
+            </div>
+            <div class="main-right">
+              <selectProjectClassfiy @sendValue="getValueObj"></selectProjectClassfiy>
+            </div>
+          </div>
 
           <div class="wrap-div" v-if="!showState.stateChannel">
             <div class="main-left">
-              学历：
+              来源渠道：
             </div>
             <div class="main-right">
               <selectChannel @sendValue="getValueObj"></selectChannel>
@@ -54,10 +45,28 @@
 
           <div class="wrap-div" v-if="!showState.stateState">
             <div class="main-left">
-              性别：
+              上/下线状态：
             </div>
             <div class="main-right">
               <select-state @sendValue="getValueObj"></select-state>
+            </div>
+          </div>
+
+          <div class="wrap-div" v-if="!showState.stateSingleChoice">
+            <div class="main-left">
+              状态：
+            </div>
+            <div class="main-right">
+              <selectSingleChoice @sendValue="getValueObj"></selectSingleChoice>
+            </div>
+          </div>
+
+          <div class="wrap-div" v-if="!showState.stateMultipleChoice">
+            <div class="main-left">
+              顾客记录：
+            </div>
+            <div class="main-right">
+              <stateMultipleChoice @sendValue="getValueObj"></stateMultipleChoice>
             </div>
           </div>
 
@@ -120,11 +129,9 @@
         }
         this.sendList = []
         this.mapList.forEach((value, key, map) => {
-          if (value !== '' && value) {
-            this.sendList.push({
-              [key]: value
-            })
-          }
+          this.sendList.push({
+            [key]: value
+          })
         })
         this.$emit('sendDataList', this.sendList)
       }

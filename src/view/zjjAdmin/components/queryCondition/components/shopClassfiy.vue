@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-  import {getPageTsProjectCategory} from '@/api/queryCondition/selectProjectClassfiy'
+  import {getPageGoodsCategory} from '@/api/queryCondition/shopClassfiy'
   export default ({
     data() {
       return {
@@ -24,17 +24,17 @@
     },
     mounted () {
       this.classfiyList = []
-      // getPageTsProjectCategory().then(res => {
-      //   this.classfiyList = []
-      //   res.info.data.map(item => {
-      //     this.classfiyList.push({
-      //       name: item.name,
-      //       id: item.id
-      //     })
-      //   })
-      // }).catch(err => {
+      getPageGoodsCategory().then(res => {
+        this.classfiyList = []
+        res.info.data.map(item => {
+          this.classfiyList.push({
+            name: item.name,
+            id: item.id
+          })
+        })
+      }).catch(err => {
 
-      // })
+      })
     }
   })
 </script>
