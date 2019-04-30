@@ -314,6 +314,8 @@ export default({
       rowData.hasBadMedicalHistory = rowData.hasBadMedicalHistory + ''
       rowData.isTeamLeader = rowData.isTeamLeader + ''
       rowData.workRole = rowData.workRole + ''
+      if (rowData.payRollBankCardNumber) rowData.payRollBankCardNumber = aesDecrypt(rowData.payRollBankCardNumber)
+      if (rowData.hasBuyInsurance + '') rowData.hasBuyInsurance = rowData.hasBuyInsurance + ''
       delete rowData._rowKey
       this.wId = rowData.id + ''
       this.modificationWorkerState = true
@@ -323,7 +325,8 @@ export default({
     },
     // 提交工人修改
     editOk () {
-      this.modificationWorkerState = true
+      this.loading_edit = true
+      // this.modificationWorkerState = true
       this.$refs.addWorkerRef.handleSubmit()
     },
     submitStateEdit (e) {

@@ -106,6 +106,18 @@
       width="900">
         <trainSee ref="trainSeeRef" />
     </Modal>
+    <!--<div class="lianx_css_box">-->
+      <!--&lt;!&ndash;http://qiniu-gongdi.lz-cc.com/FqG-X7XB8ICN3j7CW85-So15-8mk&ndash;&gt;-->
+      <!--&lt;!&ndash;http://qiniu-gongdi.lz-cc.com/Fm5vi8qPzsp3UApGv20XV_8HOFOP&ndash;&gt;-->
+      <!--<img src="http://qiniu-gongdi.lz-cc.com/FqG-X7XB8ICN3j7CW85-So15-8mk" class="bg_img">-->
+      <!--<img src="http://qiniu-gongdi.lz-cc.com/Fm5vi8qPzsp3UApGv20XV_8HOFOP" class="bg_img_move">-->
+    <!--</div>-->
+    <div class="lianx_css_box lianx">
+      <img src="http://qiniu-gongdi.lz-cc.com/FqG-X7XB8ICN3j7CW85-So15-8mk" class="bg_img">
+    </div>
+    <!--<div class="spinner">-->
+      <!--<div class="line1"></div>-->
+    <!--</div>-->
   </div>
 </template>
 <script>
@@ -582,4 +594,51 @@ export default({
   .demo-spin-icon-load{
     animation: ani-demo-spin 1s linear infinite;
   }
+  .lianx{
+    /*width: 300px;*/
+  }
+  .lianx_css_box:before{
+    contain: ' ';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-style: solid;
+    transform-origin: center 400px;
+    border-width: 0;
+    border-color: #fff;
+    border-radius: 0 0 0 4px;
+  }
+  .lianx_css_box:hover:before{
+    border-right-width: 80px;
+    border-bottom-width: 80px;
+  }
+  .bg_img{
+    width: 100%;
+    /*transform: rotate(5deg);*/
+  }
+  .bg_img_move{
+    width: 100%;
+    transform: rotate(-5deg);
+  }
+  /*.spinner > div{*/
+    /*display: inline-block;*/
+    /*width: 60px;*/
+    /*height: 60px;*/
+    /*border-radius: 50%;*/
+    /*background-color: #19be6b;*/
+    /*-webkit-animation: strechdeloy 1.2s infinite ease-in-out;*/
+  /*}*/
+  /*.spinner .line1{*/
+    /*animation-delay: -1.3s;*/
+  /*}*/
+  /*@keyframes strechdeloy{*/
+    /*from {*/
+      /*transform: scale(1);*/
+      /*opacity: 1*/
+    /*}*/
+    /*to{*/
+      /*transform: scale(4);*/
+      /*opacity: 0*/
+    /*}*/
+  /*}*/
 </style>

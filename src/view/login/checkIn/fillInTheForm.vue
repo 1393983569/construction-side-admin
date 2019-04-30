@@ -80,6 +80,12 @@
       <FormItem prop="address" label="企业营业地址" style="width: 200px">
         <Input type="text" v-model="formInline.address" placeholder="企业营业地址"></Input>
       </FormItem>
+      <FormItem prop="appId" label="AppId" style="width: 200px">
+        <Input type="text" v-model="formInline.appId" placeholder="AppId"></Input>
+      </FormItem>
+      <FormItem prop="secretKey" label="秘钥" style="width: 200px">
+        <Input type="text" v-model="formInline.secretKey" placeholder="秘钥"></Input>
+      </FormItem>
       <!--<FormItem prop="deptAddr" label="单位详细地址" style="width: 200px">-->
         <!--<Input type="text" v-model="formInline.deptAddr" placeholder="单位详细地址">-->
           <!--<Icon type="ios-person-outline" slot="prepend"></Icon>-->
@@ -162,6 +168,12 @@ export default {
         ],
         areaCode: [
           { required: true, type: 'array', message: '企业注册地区编码', trigger: 'blur' }
+        ],
+        appId: [
+          { required: true, message: 'AppId不能为空', trigger: 'blur' }
+        ],
+        secretKey: [
+          { required: true, message: '秘钥不能为空', trigger: 'blur' }
         ]
       },
       loading: false,
@@ -181,7 +193,6 @@ export default {
       this.loading = true
       this.$refs[name].validate((valid) => {
         if (valid) {
-          console.log(this.formInline, '================')
           this.formInline.dLoginName = this.dLoginNameValue
           // 处理时间格式
           this.formInline.registerDate = this.formInline.registerDate ? new Date(this.formInline.registerDate).Format("yyyy-MM-dd") : ''

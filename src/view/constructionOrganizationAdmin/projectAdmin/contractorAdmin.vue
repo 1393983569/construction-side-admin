@@ -64,9 +64,9 @@
         <FormItem prop="pmPhone" label="项目经理电话" style="width: 200px">
           <Input v-model="formInline.pmPhone" style="margin-bottom: 5px" placeholder="项目经理电话" />
         </FormItem>
-        <FormItem prop="bankName" label="银行支行名称">
-          <Select v-model="formInline.bankName" style="width:200px">
-            <Option v-for="item in bankList" :value="item.id + ''" :key="item.id">{{ item.accountTitle }}</Option>
+        <FormItem prop="bankNameValue" label="银行支行名称">
+          <Select v-model="formInline.bankNameValue" style="width:200px">
+            <Option v-for="item in bankList" :value="item.id + ':' + item.accountTitle" :key="item.id">{{ item.accountTitle }}</Option>
           </Select>
         </FormItem>
         <!-- <FormItem prop="bankName" label="银行支行名称" style="width: 200px">
@@ -211,7 +211,7 @@ export default {
         pmName: '',
         pmIDCardNumber: '',
         pmPhone: '',
-        bankName: '',
+        bankNameValue: '',
         bankNumber: '',
         bankLinkNumber: '',
         listCodeId: ''
@@ -223,7 +223,7 @@ export default {
         corpName: [
           { required: true, message: '企业名称不能为空', trigger: 'blur' }
         ],
-        bankName: [
+        bankNameValue: [
           { required: true, message: '银行支行名称不能为空', trigger: 'change' }
         ],
         corpType: [
@@ -231,9 +231,6 @@ export default {
         ],
         bankNumber: [
           { required: true, message: '银行卡号不能为空', trigger: 'blur' }
-        ],
-        bankName: [
-          { required: true, message: '银行支行名称不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -262,6 +259,7 @@ export default {
     },
     add () {
       this.getSubcontractorType()
+      this.getBankType()
       this.addState = true
     },
     cancelAdd () {
@@ -274,7 +272,10 @@ export default {
         if (valid) {
           this.formInline.entryTime = new Date(this.formInline.entryTime).Format("yyyy-MM-dd hh:mm:ss")
           this.formInline.exitTime = new Date(this.formInline.exitTime).Format("yyyy-MM-dd hh:mm:ss")
-          this.formInline.projectCode = this.projectCode + ''
+          this.formInline.bankId = this.formInline.bankNameValue.split(':')[0]
+          this.formInline.bankName = this.formInline.bankNameValue.split(':')[1]
+          this.formInline.projectCode = this.projectCode
+          // delete this.formInline.bankNameValue
           addUnity(this.formInline).then(res => {
             this.add_loading = false
             this.$refs['formInline'].resetFields()
@@ -310,6 +311,7 @@ export default {
     },
     getSubcontractorType () {
       this.subcontractorTypeList = []
+      // subcontractorType
       unityType().then(res => {
         this.subcontractorTypeList = []
         this.subcontractorTypeList.push(...res.info)
@@ -317,7 +319,7 @@ export default {
 
       })
     },
-      getSubcontractorType () {
+    getBankType () {
       this.bankList = []
       getBankList().then(res => {
         this.bankList = []

@@ -53,9 +53,10 @@
         </Select>
       </FormItem>
       <FormItem prop="issueCardDate" label="发卡时间">
-        <Input type="text" v-model="formInline.issueCardDate" style="width: 250px" placeholder="投资规模">
+        <DatePicker type="date" placeholder="发卡时间" v-model="formInline.issueCardDate" style="width: 250px"></DatePicker>
+        <!-- <Input type="text" v-model="formInline.issueCardDate" style="width: 250px" placeholder="投资规模">
 
-        </Input>
+        </Input> -->
       </FormItem>
       <FormItem prop="cardNumber" label="考勤卡号">
         <Input type="text" v-model="formInline.cardNumber"  style="width: 250px" placeholder="考勤卡号">
@@ -77,11 +78,11 @@
 
         </Input>
       </FormItem>
-      <FormItem prop="payRollTopBankCode" label="发放工资卡银行">
+      <!-- <FormItem prop="payRollTopBankCode" label="发放工资卡银行">
         <Input type="text" v-model="formInline.payRollTopBankCode"  style="width: 250px" placeholder="发放工资卡银行">
 
         </Input>
-      </FormItem>
+      </FormItem> -->
       <FormItem prop="politicsType" label="政治面貌">
          <Select v-model="formInline.politicsType" style="width:250px" placeholder="政治面貌">
           <Option v-for="item in politicsTypeList.info" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -103,8 +104,8 @@
           <Option v-for="item in cultureLevelTypeList.info" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
-      <FormItem prop="Specialty" label="特长">
-        <Input type="text" v-model="formInline.Specialty"  style="width: 250px" placeholder="特长">
+      <FormItem prop="specialty" label="特长">
+        <Input type="text" v-model="formInline.specialty"  style="width: 250px" placeholder="特长">
 
         </Input>
       </FormItem>
@@ -181,7 +182,7 @@
   import { cultureLevelType, workerType, importFile, workRole, politicsType } from '@/api/public'
   import uploadMultiple from '_c/uploadMultiple'
   import clonedeep from 'clonedeep'
-  import { getAges } from '@/libs/util'
+  import { getAges, aesDecrypt } from '@/libs/util'
   export default {
     components: {
       siteSelect,
@@ -230,7 +231,7 @@
           joinedTime: '',
           cellPhone: '',
           cultureLevelType: '',
-          Specialty: '',
+          specialty: '',
           hasBadMedicalHistory: '',
           urgentLinkMan: '',
           urgentLinkManPhone: '',
@@ -343,16 +344,22 @@
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
             let formInlineNew = clonedeep(this.formInline)
-            formInlineNew.projectCropTeamId = this.projectCorpId + ''
-            formInlineNew.startDate = formInlineNew.startDate ? new Date(formInlineNew.startDate).Format("yyyy-MM-dd") : ''
-            formInlineNew.expiryDate = formInlineNew.expiryDate ? new Date(formInlineNew.expiryDate).Format("yyyy-MM-dd") : ''
-            formInlineNew.birthday = formInlineNew.birthday ? new Date(formInlineNew.birthday).Format("yyyy-MM-dd") : ''
-            if (formInlineNew.joinedTime) formInlineNew.joinedTime = formInlineNew.joinedTime ? new Date(formInlineNew.joinedTime).Format("yyyy-MM-dd") : ''
-             if (formInlineNew.headImage && !formInlineNew.headImage.includes('http://')) {
-              formInlineNew.headImage = this.addImgBase(formInlineNew.headImage)
-            }
-
             try {
+              formInlineNew.projectCropTeamId = this.projectCorpId + ''
+              formInlineNew.startDate = formInlineNew.startDate ? new Date(formInlineNew.startDate).Format("yyyy-MM-dd") : ''
+              formInlineNew.expiryDate = formInlineNew.expiryDate ? new Date(formInlineNew.expiryDate).Format("yyyy-MM-dd") : ''
+              formInlineNew.birthday = formInlineNew.birthday ? new Date(formInlineNew.birthday).Format("yyyy-MM-dd") : ''
+              if (formInlineNew.joinedTime) formInlineNew.joinedTime = formInlineNew.joinedTime ? new Date(formInlineNew.joinedTime).Format("yyyy-MM-dd") : ''
+              if (formInlineNew.issueCardDate) formInlineNew.issueCardDate = formInlineNew.issueCardDate ? new Date(formInlineNew.issueCardDate).Format("yyyy-MM-dd") : ''
+              if (formInlineNew.workDate) formInlineNew.workDate = formInlineNew.workDate ? new Date(formInlineNew.workDate).Format("yyyy-MM-dd") : ''
+              if (formInlineNew.issueCardPic) formInlineNew.issueCardPic = this.judgeAddUrl(formInlineNew.issueCardPic)
+              if (formInlineNew.headImage) formInlineNew.headImage = this.judgeAddUrl(formInlineNew.headImage)
+              if (formInlineNew.positiveIDCardImage) formInlineNew.positiveIDCardImage = this.judgeAddUrl(formInlineNew.positiveIDCardImage)
+              if (formInlineNew.negativeIDCardImage) formInlineNew.negativeIDCardImage = this.judgeAddUrl(formInlineNew.negativeIDCardImage)
+              if (formInlineNew.projectCorpTeamDomain) delete formInlineNew.projectCorpTeamDomain
+              if (formInlineNew.headImage && !formInlineNew.headImage.includes('http://')) {
+                formInlineNew.headImage = this.addImgBase(formInlineNew.headImage)
+              }
               // 判断是否为修改
               if (this.apiState) {
                 formInlineNew.wid = this.projectCorpId + ''
@@ -384,7 +391,29 @@
       },
       // 清空表单
       handleReset () {
-         this.$refs.formValidate.resetFields()
+        this.$refs.formValidate.resetFields()
+        this.formInline.address = ''
+      },
+      judgeAddUrl (url) {
+        let urlList = []
+        let urlString = ''
+        if (url.includes(',')) {
+          url.split(',').forEath(item => {
+            if (item.includes('http')) {
+              urlList.push(item)
+            } else {
+              urlList.push(this.addImgBase(item))
+            }
+          })
+          return urlList.join(',')
+        } else {
+          if (url.includes('http')) {
+            urlString = url
+          } else {
+            urlString = this.addImgBase(url)
+          }
+          return urlString
+        }
       }
     },
     mounted () {
@@ -392,6 +421,9 @@
     },
     watch: {
       row (e) {
+        // if (e.payRollBankCardNumber) {
+        //   e.payRollBankCardNumber = aesDecrypt(e.payRollBankCardNumber)
+        // }
         this.formInline = e
       }
     }
